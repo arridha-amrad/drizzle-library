@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "npx drizzle-kit generate:pg --schema ./src/drizzle/schema.ts --out=./src/drizzle/migrations",
-    "db:migrate": "npx tsx ./src/drizzle/migrate.ts"
+    "db:migrate": "npx drizzle-kit generate && tsx ./src/drizzle/migrate.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.3",

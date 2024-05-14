@@ -24,7 +24,11 @@ export default function RootLayout({
       >
         <Sidebar />
         <div className="w-full">{children}</div>
-        <ToastContainer position="bottom-center" autoClose={3000} />
+        <ToastContainer
+          theme="dark"
+          position="bottom-center"
+          autoClose={3000}
+        />
       </body>
     </html>
   );

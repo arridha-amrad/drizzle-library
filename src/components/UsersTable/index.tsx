@@ -1,4 +1,4 @@
-import { fetchUsers } from "@/actions";
+import { fetchUsers } from "@/actions/actions";
 import DeleteUserButton from "../DeleteUserBtn";
 import EditUserButton from "../EditUserBtn";
 import PaginateButton from "../PaginateButton";
@@ -23,7 +23,7 @@ export default async function UsersTable({ page, name }: Props) {
     <>
       {data.total === 0 ? (
         <section className="w-full flex justify-center">
-          <p className="text-neutral">No record found</p>
+          <p className="text-neutral-500">No record found</p>
         </section>
       ) : (
         <section className="overflow-x-auto">

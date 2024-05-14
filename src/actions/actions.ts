@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidateTag, unstable_cache } from "next/cache";
-import { db } from "./drizzle/migrate";
-import { users } from "./drizzle/schema";
+import { db } from "../drizzle/migrate";
+import { users } from "../drizzle/schema";
 import { count, desc, eq, ilike, like } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { LIMIT_USERS } from "./variables";
+import { LIMIT_USERS } from "../variables";
 
 export const register = async (data: FormData) => {
   const email = data.get("email");

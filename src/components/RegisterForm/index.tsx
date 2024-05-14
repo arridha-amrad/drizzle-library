@@ -1,6 +1,6 @@
 "use client";
 
-import { editUser, register } from "@/actions";
+import { editUser, register } from "@/actions/actions";
 import RegisterSubmitButton from "./RegisterSubmitBtn";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

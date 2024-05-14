@@ -1,6 +1,6 @@
 "use client";
 
-import { removeUser } from "@/actions";
+import { removeUser } from "@/actions/actions";
 
 export default function DeleteUserButton({ id }: { id: number }) {
   return (

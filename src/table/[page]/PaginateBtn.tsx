@@ -1,6 +1,6 @@
 "use client";
 
-import { setUsersPageCookies } from "@/actions";
+import { setUsersPageCookies } from "@/actions/actions";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function PaginateButton({ number }: { number: number }) {

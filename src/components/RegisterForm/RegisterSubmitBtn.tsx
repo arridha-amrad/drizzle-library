@@ -8,7 +8,7 @@ export default function RegisterSubmitButton({
 }: {
   isDisabled: boolean;
 }) {
-  const { pending, data } = useFormStatus();
+  const { pending } = useFormStatus();
 
   const params = useSearchParams();
   const isEdit = params.get("isEdit");
