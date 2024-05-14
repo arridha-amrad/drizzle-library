@@ -1,11 +1,21 @@
-import { fetchBooks } from "@/actions/bookActions";
+import { BooksFilterProps, fetchBooks } from "@/actions/bookActions";
 import DeleteBookButton from "./DeleteBookBtn";
 
-export default async function BooksTable() {
-  const { books, total } = await fetchBooks();
+export default async function BooksTable({
+  author,
+  categories,
+  title,
+  page,
+}: BooksFilterProps) {
+  const { books, total } = await fetchBooks({
+    author,
+    categories,
+    title,
+    page,
+  });
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto h-full py-4">
       <table className="table">
         <thead>
           <tr>

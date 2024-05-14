@@ -1,6 +1,11 @@
+"use client";
+
+import { useFormStatus } from "react-dom";
+
 export default function SubmitButton() {
+  const { pending } = useFormStatus();
   return (
-    <button className="btn btn-circle">
+    <button disabled={pending} className="btn">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
@@ -13,6 +18,8 @@ export default function SubmitButton() {
           clipRule="evenodd"
         />
       </svg>
+      {pending ? "loading" : "Submit"}
+      {pending && <span className="loading loading-spinner loading-md"></span>}
     </button>
   );
 }
