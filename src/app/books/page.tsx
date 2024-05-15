@@ -1,7 +1,7 @@
 import { fetchCategories } from "@/actions/bookActions";
 import AddBookButton from "@/components/AddBooksBtn";
 import BookFilterForm from "@/components/BookFilterForm";
-import BooksTable from "@/components/BooksTable";
+import BooksTable from "@/components/BooksTable/BooksTable";
 
 type Params = {
   title?: string;

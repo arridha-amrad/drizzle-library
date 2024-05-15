@@ -1,9 +1,11 @@
+import { Suspense } from "react";
+
 export default async function Page() {
   return (
-    <section>
+    <Suspense>
       <div>
         <h1>Create Books page</h1>
       </div>
-    </section>
+    </Suspense>
   );
 }

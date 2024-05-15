@@ -51,6 +51,7 @@ export default function ModalAddBookForm() {
       <div className="modal-action">
         <SubmitButton />
         <button
+          type="button"
           onClick={() => {
             router.back();
             setOpen(false);
