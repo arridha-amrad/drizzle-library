@@ -22,15 +22,11 @@ export const searchBooks = async (data: FormData) => {
     .map((val) => {
       val.trim();
       if (val.includes("#")) {
-        console.log("replace");
         return val.replace("#", "%23");
       }
       return val;
     })
     .join(",");
-
-  console.log("cats", catStr);
-
   redirect(
     `/books?isFilter=true&categories=${catStr}&author=${author}&page=1&title=${title}`
   );

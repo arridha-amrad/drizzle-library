@@ -24,7 +24,6 @@ export default async function BooksTable({
           <thead>
             <tr>
               <th>No</th>
-              <th>Id</th>
               <th>Title</th>
               <th>Author</th>
               <th>Categories</th>
@@ -34,17 +33,17 @@ export default async function BooksTable({
           <tbody>
             {books.map((book, i) => (
               <tr key={book.id}>
-                <td>{i + 1}</td>
-                <td>{book.id}</td>
+                <td>{i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}</td>
                 <td>{book.title}</td>
                 <td>{book.author}</td>
-                {/* <td>{book.categories.join(", ")}</td> */}
                 <td className="space-x-1">
                   {book.categories.map((cat, i) => (
                     <Link
                       key={i}
                       className="space-x-1"
-                      href={`/books?isFilter=true&categories=${cat}`}
+                      href={`/books?isFilter=true&categories=${
+                        cat.includes("#") ? cat.replaceAll("#", "%23") : cat
+                      }`}
                     >
                       {cat}
                       {i === book.categories.length - 1 ? "" : ","}

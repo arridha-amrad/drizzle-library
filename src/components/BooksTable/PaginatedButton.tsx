@@ -13,8 +13,6 @@ export default function PaginateButton({ number }: { number: number }) {
   const action = () => {
     currentQueryParams.set("page", number.toString());
     const qpStr = currentQueryParams.toString();
-    console.log({ qpStr });
-
     router.push(`${pathname}?${qpStr}`);
   };
   return (
