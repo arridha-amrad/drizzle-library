@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
+  integer,
+  jsonb,
   pgTable,
   primaryKey,
   serial,
@@ -22,6 +24,10 @@ export const BooksTable = pgTable("books", {
   title: varchar("title", { length: 255 }).notNull(),
   author: varchar("author").notNull(),
   categories: text("categories").array().notNull().$type<string[]>(),
+  stocks: jsonb("stocks")
+    .$type<{ total: number; available: number }>()
+    .default({ total: 3, available: 3 })
+    .notNull(),
 });
 
 export const CategoriesTable = pgTable("categories", {
@@ -29,40 +35,46 @@ export const CategoriesTable = pgTable("categories", {
   name: varchar("name").notNull().unique(),
 });
 
-export const BooksToCategoriesTable = pgTable(
-  "bookss_to_categories",
+const setDue = () => {
+  const now = new Date().getTime();
+  const dueLength = 1000 * 60 * 60 * 24 * 10;
+  return new Date(now + dueLength);
+};
+
+export const LoanTable = pgTable(
+  "loan",
   {
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
     bookId: uuid("book_id")
       .notNull()
       .references(() => BooksTable.id),
-    categoryId: serial("category_id")
-      .notNull()
-      .references(() => CategoriesTable.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    // due after 10 days from created_at
+    dueAt: timestamp("due_at").$defaultFn(setDue),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.bookId, t.categoryId] }),
+  (table) => ({
+    pk: primaryKey({ columns: [table.bookId, table.userId] }),
   })
 );
 
-// Relation
-export const booksRelations = relations(BooksTable, ({ many }) => ({
-  booksToCategories: many(BooksToCategoriesTable),
+// Relations
+export const UsersRelation = relations(users, ({ many }) => ({
+  usersToLoanBooks: many(LoanTable),
 }));
 
-export const categoriesRelations = relations(CategoriesTable, ({ many }) => ({
-  booksToCategories: many(BooksToCategoriesTable),
+export const BooksRelation = relations(BooksTable, ({ many }) => ({
+  booksToLoanUsers: many(LoanTable),
 }));
 
-export const booksToCategoriesRelations = relations(
-  BooksToCategoriesTable,
-  ({ one }) => ({
-    book: one(BooksTable, {
-      fields: [BooksToCategoriesTable.bookId],
-      references: [BooksTable.id],
-    }),
-    categories: one(CategoriesTable, {
-      fields: [BooksToCategoriesTable.categoryId],
-      references: [CategoriesTable.id],
-    }),
-  })
-);
+export const UserToLoanBooksRelation = relations(LoanTable, ({ one }) => ({
+  book: one(BooksTable, {
+    fields: [LoanTable.bookId],
+    references: [BooksTable.id],
+  }),
+  user: one(users, {
+    fields: [LoanTable.userId],
+    references: [users.id],
+  }),
+}));

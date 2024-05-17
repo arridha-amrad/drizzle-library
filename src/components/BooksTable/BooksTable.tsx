@@ -34,7 +34,9 @@ export default async function BooksTable({
             {books.map((book, i) => (
               <tr key={book.id}>
                 <td>{i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}</td>
-                <td>{book.title}</td>
+                <td>
+                  <Link href={`/books/${book.id}`}>{book.title}</Link>
+                </td>
                 <td>{book.author}</td>
                 <td className="space-x-1">
                   {book.categories.map((cat, i) => (

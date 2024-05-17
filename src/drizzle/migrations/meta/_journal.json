@@ -29,6 +29,20 @@
       "when": 1715682234676,
       "tag": "0003_oval_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1715936929572,
+      "tag": "0004_rainy_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1715938665593,
+      "tag": "0005_opposite_quentin_quire",
+      "breakpoints": true
     }
   ]
 }

@@ -1,9 +1,14 @@
 "use server";
 
 import { db } from "@/drizzle/migrate";
-import { BooksTable, CategoriesTable } from "@/drizzle/schema";
+import {
+  BooksTable,
+  CategoriesTable,
+  LoanTable,
+  users,
+} from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
-import { and, arrayContains, eq, ilike } from "drizzle-orm";
+import { and, arrayContains, desc, eq, ilike } from "drizzle-orm";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -27,9 +32,14 @@ export const searchBooks = async (data: FormData) => {
       return val;
     })
     .join(",");
-  redirect(
-    `/books?isFilter=true&categories=${catStr}&author=${author}&page=1&title=${title}`
-  );
+  const params = new URLSearchParams({
+    isFilter: "true",
+    page: "1",
+    ...(catStr && { categories: catStr }),
+    ...(author && { author: String(author) }),
+    ...(title && { title: String(title) }),
+  });
+  redirect(`/books?${params}`);
 };
 
 export const storeBooks = async (data: FormData) => {
@@ -61,41 +71,43 @@ export const storeBooks = async (data: FormData) => {
   revalidateTag("categories");
 };
 
-const getBooks = async (props: BooksFilterProps) => {
-  const acceptedCategories = props.categories?.filter((val) => val !== "null");
+const getBooks = async ({
+  author,
+  categories,
+  page,
+  title,
+}: BooksFilterProps) => {
   return db
     .select()
     .from(BooksTable)
     .limit(LIMIT_BOOKS)
-    .offset(props.page ? (props.page - 1) * LIMIT_BOOKS : 0)
+    .offset(page ? (page - 1) * LIMIT_BOOKS : 0)
     .where(
       and(
-        props.author && props.author !== "null"
-          ? ilike(BooksTable.author, `%${props.author}%`)
+        author && author !== "null"
+          ? ilike(BooksTable.author, `%${author}%`)
           : undefined,
-        props.title && props.title !== "null"
-          ? ilike(BooksTable.title, `%${props.title}%`)
+        title && title !== "null"
+          ? ilike(BooksTable.title, `%${title}%`)
           : undefined,
-        acceptedCategories && acceptedCategories.length > 0
-          ? arrayContains(BooksTable.categories, acceptedCategories)
+        categories && categories.length > 0
+          ? arrayContains(BooksTable.categories, categories)
           : undefined
       )
     );
 };
 
-const getTotal = async (props: BooksFilterProps) => {
+const getTotal = async ({ author, categories, title }: BooksFilterProps) => {
   return (
     await db
       .select()
       .from(BooksTable)
       .where(
         and(
-          props.author
-            ? ilike(BooksTable.author, `%${props.author}%`)
-            : undefined,
-          props.title ? ilike(BooksTable.title, `%${props.title}%`) : undefined,
-          props.categories && props.categories.length > 0
-            ? arrayContains(BooksTable.categories, props.categories)
+          author ? ilike(BooksTable.author, `%${author}%`) : undefined,
+          title ? ilike(BooksTable.title, `%${title}%`) : undefined,
+          categories && categories.length > 0
+            ? arrayContains(BooksTable.categories, categories)
             : undefined
         )
       )
@@ -108,9 +120,13 @@ export type BooksFilterProps = Partial<
 
 export const fetchBooks = unstable_cache(
   async (props: BooksFilterProps) => {
+    const acceptedCategories = props.categories?.filter(
+      (val) => val !== "null"
+    );
+    const myProps = { ...props, categories: acceptedCategories };
     const [total, books] = await Promise.all([
-      getTotal(props),
-      getBooks(props),
+      getTotal(myProps),
+      getBooks(myProps),
     ]);
     return { total, books };
   },
@@ -122,3 +138,50 @@ export const deleteBooks = async (id: string) => {
   await db.delete(BooksTable).where(eq(BooksTable.id, id));
   revalidateTag("books");
 };
+
+export const loanABook = async (bookId: string, data: FormData) => {
+  const userId = data.get("userId") as string;
+  const book = await db
+    .select()
+    .from(BooksTable)
+    .where(eq(BooksTable.id, bookId));
+  if (!book) return;
+  await db.insert(LoanTable).values({ bookId, userId: Number(userId) });
+  await db.update(BooksTable).set({
+    stocks: {
+      total: 3,
+      available: book[0].stocks.available - 1,
+    },
+  });
+  revalidateTag("loan_book");
+};
+
+export const getBookLoanData = unstable_cache(
+  async (bookId: string) => {
+    const data = await db
+      .select({
+        loan: {
+          dueAt: LoanTable.dueAt,
+          loanAt: LoanTable.createdAt,
+        },
+        user: {
+          name: users.name,
+          id: users.id,
+        },
+        book: {
+          title: BooksTable.title,
+          id: BooksTable.id,
+        },
+      })
+      .from(LoanTable)
+      .where(eq(LoanTable.bookId, bookId))
+      .innerJoin(users, eq(users.id, LoanTable.userId))
+      .innerJoin(BooksTable, eq(LoanTable.bookId, BooksTable.id))
+      .orderBy(desc(LoanTable.createdAt));
+    return data;
+  },
+  ["loan_book"],
+  {
+    tags: ["loan_book"],
+  }
+);
