@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} container mx-auto min-h-screen flex`}
       >
+        <NextTopLoader />
         <Sidebar />
         <div className="w-full">{children}</div>
         <ToastContainer

@@ -52,7 +52,7 @@ export const LoanTable = pgTable(
       .references(() => BooksTable.id),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     // due after 10 days from created_at
-    dueAt: timestamp("due_at").$defaultFn(setDue),
+    dueAt: timestamp("due_at").$defaultFn(setDue).notNull(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.bookId, table.userId] }),

@@ -1,4 +1,4 @@
-import ModalLoanBookForm from "@/app/LoanBookForm/modal";
+import ModalLoanBookForm from "@/app/LoanBookForm";
 
 export default async function Page() {
   return (

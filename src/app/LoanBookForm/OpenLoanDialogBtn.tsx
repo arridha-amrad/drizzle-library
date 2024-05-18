@@ -1,12 +1,17 @@
 "use client";
 
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-export default function OpenLoanDialogBtn() {
+export default function OpenLoanDialogBtn({
+  available,
+}: {
+  available: number;
+}) {
   const router = useRouter();
   const params = useParams();
   return (
     <button
+      disabled={available === 0}
       onClick={() => router.push(`/books/${params.id}/loan`)}
       className="btn btn-primary"
     >

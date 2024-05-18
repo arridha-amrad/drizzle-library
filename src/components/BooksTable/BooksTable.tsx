@@ -25,6 +25,7 @@ export default async function BooksTable({
             <tr>
               <th>No</th>
               <th>Title</th>
+              <th>Stocks</th>
               <th>Author</th>
               <th>Categories</th>
               <th>Actions</th>
@@ -36,6 +37,10 @@ export default async function BooksTable({
                 <td>{i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}</td>
                 <td>
                   <Link href={`/books/${book.id}`}>{book.title}</Link>
+                </td>
+                <td>
+                  <div>total : {book.stocks.total}</div>
+                  <div>available : {book.stocks.available}</div>
                 </td>
                 <td>{book.author}</td>
                 <td className="space-x-1">

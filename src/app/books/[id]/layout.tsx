@@ -3,13 +3,16 @@ import { ReactNode } from "react";
 type Props = {
   children: ReactNode;
   modal: ReactNode;
+  loanList: ReactNode;
 };
 
-export default async function Layout({ children, modal }: Props) {
+export default async function Layout({ children, modal, loanList }: Props) {
   return (
     <main className="px-8">
       {children}
       {modal}
+      <div className="divider"></div>
+      {loanList}
     </main>
   );
 }

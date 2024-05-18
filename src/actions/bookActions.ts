@@ -9,7 +9,7 @@ import {
 } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
 import { and, arrayContains, desc, eq, ilike } from "drizzle-orm";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const fetchCategories = unstable_cache(
@@ -141,19 +141,41 @@ export const deleteBooks = async (id: string) => {
 
 export const loanABook = async (bookId: string, data: FormData) => {
   const userId = data.get("userId") as string;
+  const userTotalLoan = await db
+    .select()
+    .from(LoanTable)
+    .where(eq(LoanTable.userId, Number(userId)));
+
+  if (userTotalLoan.length >= 4) {
+    return {
+      error: "User has loaned 4 books.",
+    };
+  }
   const book = await db
     .select()
     .from(BooksTable)
     .where(eq(BooksTable.id, bookId));
-  if (!book) return;
-  await db.insert(LoanTable).values({ bookId, userId: Number(userId) });
-  await db.update(BooksTable).set({
-    stocks: {
-      total: 3,
-      available: book[0].stocks.available - 1,
-    },
+
+  if (book[0].stocks.available === 0) {
+    return {
+      error: "un available stock",
+    };
+  }
+
+  await db.transaction(async (tx) => {
+    await tx.insert(LoanTable).values({ bookId, userId: Number(userId) });
+    await db
+      .update(BooksTable)
+      .set({
+        stocks: {
+          total: 3,
+          available: book[0].stocks.available - 1,
+        },
+      })
+      .where(eq(BooksTable.id, book[0].id));
   });
-  revalidateTag("loan_book");
+  revalidatePath(`/books/${bookId}`);
+  revalidatePath(`/books`);
 };
 
 export const getBookLoanData = unstable_cache(
@@ -185,3 +207,11 @@ export const getBookLoanData = unstable_cache(
     tags: ["loan_book"],
   }
 );
+
+export const getBookDetail = async (bookId: string) => {
+  const book = await db
+    .select()
+    .from(BooksTable)
+    .where(eq(BooksTable.id, bookId));
+  return book;
+};
