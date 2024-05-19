@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  bigint,
   integer,
   jsonb,
   pgTable,
@@ -59,13 +60,28 @@ export const LoanTable = pgTable(
   })
 );
 
+export const LoanHistoriesTable = pgTable("loan_histories", {
+  id: serial("id").primaryKey(),
+  userId: serial("user_id")
+    .notNull()
+    .references(() => users.id),
+  bookId: uuid("book_id")
+    .notNull()
+    .references(() => BooksTable.id),
+  loanAt: timestamp("loan_at").notNull(),
+  returnAt: timestamp("return_at").notNull(),
+  charge: bigint("charge", { mode: "number" }).notNull().default(0),
+});
+
 // Relations
 export const UsersRelation = relations(users, ({ many }) => ({
   usersToLoanBooks: many(LoanTable),
+  userToLoanHistories: many(LoanHistoriesTable),
 }));
 
 export const BooksRelation = relations(BooksTable, ({ many }) => ({
   booksToLoanUsers: many(LoanTable),
+  userToLoanHistories: many(LoanHistoriesTable),
 }));
 
 export const UserToLoanBooksRelation = relations(LoanTable, ({ one }) => ({
@@ -78,3 +94,17 @@ export const UserToLoanBooksRelation = relations(LoanTable, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const LoanHistoriesRelation = relations(
+  LoanHistoriesTable,
+  ({ one }) => ({
+    book: one(BooksTable, {
+      fields: [LoanHistoriesTable.bookId],
+      references: [BooksTable.id],
+    }),
+    user: one(users, {
+      fields: [LoanHistoriesTable.userId],
+      references: [users.id],
+    }),
+  })
+);

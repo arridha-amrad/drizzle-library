@@ -1,7 +1,7 @@
 import { BooksFilterProps, fetchBooks } from "@/actions/bookActions";
 import DeleteBookButton from "../DeleteBookBtn";
 import { LIMIT_BOOKS } from "@/variables";
-import PaginateButton from "./PaginatedButton";
+import PaginateButton from "../PaginatedButton";
 import Link from "next/link";
 
 export default async function BooksTable({

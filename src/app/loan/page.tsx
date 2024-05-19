@@ -1,6 +1,8 @@
+import PaginatedButton from "@/components/PaginatedButton";
 import ReturnBookBtn from "@/components/ReturnBookBtn";
 import { db } from "@/drizzle/migrate";
 import { BooksTable, LoanTable, users } from "@/drizzle/schema";
+import countCharge from "@/utils/countCharge";
 import { LIMIT_BOOKS } from "@/variables";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
@@ -20,6 +22,11 @@ const fetchLoanBooks = async ({ page }: Args) => {
   return books;
 };
 
+const fetchTotalLoanBooks = async () => {
+  const total = await db.select().from(LoanTable);
+  return total.length;
+};
+
 type Params = {
   searchParams: {
     page?: number;
@@ -27,29 +34,21 @@ type Params = {
 };
 
 export default async function Page({ searchParams: { page } }: Params) {
-  const books = await fetchLoanBooks({ page });
-  const findCharge = (dueDate: Date) => {
-    const dueTime = dueDate.getTime();
-    const currTime = new Date().getTime();
-    const charge =
-      Math.floor((currTime - dueTime) / (1000 * 60 * 60 * 24)) * 1000;
-    return currTime - dueTime <= 0
-      ? "-"
-      : charge <= 0
-      ? "-"
-      : charge.toString();
-  };
+  const [books, total] = await Promise.all([
+    fetchLoanBooks({ page }),
+    fetchTotalLoanBooks(),
+  ]);
   return (
     <>
       <div className="overflow-x-auto h-full py-4">
-        <table className="table border border-neutral-700">
+        <table className="table">
           <thead className="">
             <tr>
               <th>No</th>
               <th>Title</th>
               <th>Loan by</th>
               <th>Loan At</th>
-              <th>Return At</th>
+              <th>Due At</th>
               <th>Charge</th>
               <th>Actions</th>
             </tr>
@@ -69,21 +68,21 @@ export default async function Page({ searchParams: { page } }: Params) {
                   </Link>
                 </td>
                 <td>
-                  {new Intl.DateTimeFormat("en-US").format(
-                    new Date(book.loan.createdAt)
-                  )}
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  }).format(new Date(book.loan.createdAt))}
                 </td>
                 <td>
-                  {new Intl.DateTimeFormat("en-US").format(
-                    new Date(book.loan.dueAt)
-                  )}
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  }).format(new Date(book.loan.dueAt))}
                 </td>
-                <td>{findCharge(book.loan.dueAt)}</td>
+
+                <td>{countCharge(book.loan.dueAt).toString()}</td>
                 <td>
-                  <ReturnBookBtn
-                    bookId={book.books.id}
-                    userId={book.users.id}
-                  />
+                  <ReturnBookBtn data={book.loan} />
                 </td>
               </tr>
             ))}
@@ -91,15 +90,15 @@ export default async function Page({ searchParams: { page } }: Params) {
         </table>
       </div>
 
-      {/* <section className="w-full flex justify-center py-4">
+      <section className="w-full flex justify-center py-4">
         {total > LIMIT_BOOKS && (
           <div className="join">
             {new Array(Math.ceil(total / LIMIT_BOOKS)).fill("").map((_, i) => (
-              <PaginateButton key={i} number={i + 1} />
+              <PaginatedButton key={i} number={i + 1} />
             ))}
           </div>
         )}
-      </section> */}
+      </section>
     </>
   );
 }

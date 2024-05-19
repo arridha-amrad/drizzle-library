@@ -23,7 +23,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} container mx-auto min-h-screen flex`}
       >
-        <NextTopLoader />
+        <NextTopLoader showSpinner={false} />
         <Sidebar />
         <div className="w-full">{children}</div>
         <ToastContainer

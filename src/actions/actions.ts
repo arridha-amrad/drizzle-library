@@ -3,7 +3,7 @@
 import { revalidateTag, unstable_cache } from "next/cache";
 import { db } from "../drizzle/migrate";
 import { users } from "../drizzle/schema";
-import { count, desc, eq, ilike, like } from "drizzle-orm";
+import { desc, eq, ilike } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { LIMIT_USERS } from "../variables";
 

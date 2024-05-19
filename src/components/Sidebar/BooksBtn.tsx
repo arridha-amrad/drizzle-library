@@ -11,7 +11,7 @@ export default function SidebarBooksButton() {
     <Link
       href="/books"
       className={`btn w-full rounded-none bg-transparent border-none ${
-        pathname === target ? "text-primary" : ""
+        pathname.includes(target) ? "text-primary" : ""
       }`}
     >
       Books

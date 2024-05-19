@@ -8,7 +8,7 @@ type Props = {
 export default async function BookDetail({ bookId }: Props) {
   const book = await getBookDetail(bookId);
   return (
-    <div className="overflow-x-auto border border-neutral-700">
+    <div className="overflow-x-auto">
       <table className="table ">
         <thead>
           <tr>

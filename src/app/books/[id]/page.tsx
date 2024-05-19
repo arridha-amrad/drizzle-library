@@ -16,7 +16,7 @@ export default async function Page({ params }: Params) {
       <div className="h-[70px] flex items-center">
         <h1 className="font-semibold text-lg">Book Detail</h1>
       </div>
-      <div className="overflow-x-auto border border-neutral-700">
+      <div className="overflow-x-auto">
         <table className="table ">
           <thead>
             <tr>
@@ -28,7 +28,7 @@ export default async function Page({ params }: Params) {
           </thead>
           <tbody>
             <tr>
-              <th>{book[0].title}</th>
+              <td>{book[0].title}</td>
               <td>
                 <div>total : {book[0].stocks.total}</div>
                 <div>available : {book[0].stocks.available}</div>

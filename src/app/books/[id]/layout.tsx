@@ -11,7 +11,6 @@ export default async function Layout({ children, modal, loanList }: Props) {
     <main className="px-8">
       {children}
       {modal}
-      <div className="divider"></div>
       {loanList}
     </main>
   );

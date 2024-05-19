@@ -1,7 +1,8 @@
 import Link from "next/link";
-import SidebarUsersButton from "./SidebarUsersBtn";
-import SidebarBooksButton from "./SidebarBooksBtn";
-import SidebarLoanBooksButton from "./SidebarLoanBooksBtn";
+import SidebarUsersButton from "./UsersBtn";
+import SidebarBooksButton from "./BooksBtn";
+import SidebarLoanBooksButton from "./LoanBtn";
+import HistoriesButton from "./HistoriesBtn";
 
 export default async function Sidebar() {
   return (
@@ -16,6 +17,7 @@ export default async function Sidebar() {
         <SidebarUsersButton />
         <SidebarBooksButton />
         <SidebarLoanBooksButton />
+        <HistoriesButton />
       </div>
     </aside>
   );

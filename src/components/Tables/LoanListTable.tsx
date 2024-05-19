@@ -8,7 +8,7 @@ export default async function LoanListTable({ bookId }: Props) {
   const loanList = await getBookLoanData(bookId);
 
   return (
-    <div className="overflow-x-auto border border-neutral-700">
+    <div className="overflow-x-auto">
       <table className="table ">
         <thead>
           <tr>
