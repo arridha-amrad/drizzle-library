@@ -1,5 +1,5 @@
 import { getBookDetail } from "@/actions/bookActions";
-import OpenLoanDialogBtn from "@/app/LoanBookForm/OpenLoanDialogBtn";
+import OpenLoanDialogBtn from "@/components/LoanBookForm/OpenLoanDialogBtn";
 import Link from "next/link";
 
 type Params = {

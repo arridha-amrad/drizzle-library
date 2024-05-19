@@ -1,20 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-export default function SidebarBooksButton() {
-  const target = "/books";
+export default function SidebarLoanBooksButton() {
+  const target = "/loan";
   const pathname = usePathname();
-
   return (
     <Link
-      href="/books"
+      href={target}
       className={`btn w-full rounded-none bg-transparent border-none ${
         pathname === target ? "text-primary" : ""
       }`}
     >
-      Books
+      Loan Books
     </Link>
   );
 }

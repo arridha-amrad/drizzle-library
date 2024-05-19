@@ -8,7 +8,7 @@ import {
   users,
 } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
-import { and, arrayContains, desc, eq, ilike } from "drizzle-orm";
+import { and, arrayContains, desc, eq, ilike, sql } from "drizzle-orm";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -141,16 +141,33 @@ export const deleteBooks = async (id: string) => {
 
 export const loanABook = async (bookId: string, data: FormData) => {
   const userId = data.get("userId") as string;
-  const userTotalLoan = await db
+
+  const pLoanTable = db
     .select()
     .from(LoanTable)
-    .where(eq(LoanTable.userId, Number(userId)));
+    .where(
+      and(
+        sql.placeholder("bookId")
+          ? eq(LoanTable.bookId, sql.placeholder("bookId"))
+          : undefined,
+        eq(LoanTable.userId, sql.placeholder("userId"))
+      )
+    )
+    .prepare("prepare_loan_table");
+
+  // const userTotalLoan = await db
+  //   .select()
+  //   .from(LoanTable)
+  //   .where(eq(LoanTable.userId, Number(userId)));
+
+  const userTotalLoan = await pLoanTable.execute({ userId });
 
   if (userTotalLoan.length >= 4) {
     return {
       error: "User has loaned 4 books.",
     };
   }
+
   const book = await db
     .select()
     .from(BooksTable)
@@ -162,20 +179,37 @@ export const loanABook = async (bookId: string, data: FormData) => {
     };
   }
 
-  await db.transaction(async (tx) => {
-    await tx.insert(LoanTable).values({ bookId, userId: Number(userId) });
-    await db
-      .update(BooksTable)
-      .set({
-        stocks: {
-          total: 3,
-          available: book[0].stocks.available - 1,
-        },
-      })
-      .where(eq(BooksTable.id, book[0].id));
-  });
-  revalidatePath(`/books/${bookId}`);
-  revalidatePath(`/books`);
+  const isLoanedSameBook = await db
+    .select()
+    .from(LoanTable)
+    .where(
+      and(eq(LoanTable.userId, Number(userId)), eq(LoanTable.bookId, bookId))
+    );
+
+  if (isLoanedSameBook) {
+    return {
+      error: "The user has been loaning this book",
+    };
+  }
+
+  try {
+    await db.transaction(async (tx) => {
+      await tx.insert(LoanTable).values({ bookId, userId: Number(userId) });
+      await db
+        .update(BooksTable)
+        .set({
+          stocks: {
+            total: 3,
+            available: book[0].stocks.available - 1,
+          },
+        })
+        .where(eq(BooksTable.id, book[0].id));
+    });
+    revalidatePath(`/books/${bookId}`);
+    revalidatePath(`/books`);
+  } catch (err: any) {
+    throw new Error(err);
+  }
 };
 
 export const getBookLoanData = unstable_cache(
