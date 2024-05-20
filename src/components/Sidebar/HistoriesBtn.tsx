@@ -10,9 +10,7 @@ export default function HistoriesButton() {
   return (
     <Link
       href={target}
-      className={`btn w-full rounded-none bg-transparent border-none ${
-        pathname === target ? "text-primary" : ""
-      }`}
+      className={`${pathname === target ? "text-primary" : ""}`}
     >
       Histories
     </Link>

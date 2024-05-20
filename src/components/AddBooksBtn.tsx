@@ -7,13 +7,13 @@ export default function AddBookButton() {
   return (
     <button
       onClick={() => router.push("/books/add")}
-      className="btn btn-circle btn-primary"
+      className="btn btn-sm lg:btn-md btn-circle btn-primary"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
         y="0px"
-        className="h-6 w-6"
+        className="md:h-6 md:w-6 h-4 w-4"
         viewBox="0 0 24 24"
       >
         <path

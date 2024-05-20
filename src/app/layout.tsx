@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NextTopLoader from "nextjs-toploader";
+import Drawer from "@/components/Drawer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,16 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} container mx-auto min-h-screen flex`}
+        className={`${inter.className} xl:container w-full mx-auto min-h-screen`}
       >
         <NextTopLoader showSpinner={false} />
-        <Sidebar />
-        <div className="w-full">{children}</div>
-        <ToastContainer
-          theme="dark"
-          position="bottom-center"
-          autoClose={3000}
-        />
+        <Drawer>
+          <div className="w-full">{children}</div>
+          <ToastContainer
+            theme="dark"
+            position="bottom-center"
+            autoClose={3000}
+          />
+        </Drawer>
       </body>
     </html>
   );

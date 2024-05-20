@@ -9,9 +9,7 @@ export default function SidebarLoanBooksButton() {
   return (
     <Link
       href={target}
-      className={`btn w-full rounded-none bg-transparent border-none ${
-        pathname === target ? "text-primary" : ""
-      }`}
+      className={`${pathname === target ? "text-primary" : ""}`}
     >
       Loan Books
     </Link>

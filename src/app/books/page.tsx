@@ -31,7 +31,7 @@ export default async function Page({ searchParams }: Props) {
         title={title}
         page={page}
       />
-      <div className="fixed bottom-10 right-28">
+      <div className="fixed bottom-4 right-4">
         <AddBookButton />
       </div>
     </section>
