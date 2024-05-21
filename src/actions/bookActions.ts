@@ -43,24 +43,19 @@ export const searchBooks = async (data: FormData) => {
 export const storeBooks = async (data: FormData) => {
   const values = Object.fromEntries(data.entries());
   const { title, categories, author } = values;
-
   const arrCategories = String(categories).split(",");
-
   if (!title || !categories || !author) return;
-
   await db.transaction(async (tx) => {
     await tx.insert(BooksTable).values({
       author: String(author),
       categories: arrCategories.map((text) => text.trim().toLowerCase()),
       title: String(title),
     });
-
     await tx
       .insert(CategoriesTable)
       .values(arrCategories.map((val) => ({ name: val.toLowerCase() })))
       .onConflictDoNothing({});
   });
-
   revalidatePath("/books");
 };
 
