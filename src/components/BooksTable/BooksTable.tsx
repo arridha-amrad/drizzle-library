@@ -46,7 +46,7 @@ export default async function BooksTable({
                   {book.categories.map((cat, i) => (
                     <Link
                       key={i}
-                      className="space-x-1"
+                      className="space-x-1 hover:underline"
                       href={`/books?isFilter=true&categories=${
                         cat.includes("#") ? cat.replaceAll("#", "%23") : cat
                       }`}

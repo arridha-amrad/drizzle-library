@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NextTopLoader from "nextjs-toploader";
@@ -18,11 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
   modal,
-  modalbook,
 }: Readonly<{
   children: React.ReactNode;
   modal: ReactNode;
-  modalbook: ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -34,7 +31,6 @@ export default function RootLayout({
           <div className="w-full">
             {children}
             {modal}
-            {modalbook}
           </div>
           <ToastContainer
             theme="dark"

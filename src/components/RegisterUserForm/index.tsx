@@ -3,7 +3,7 @@
 import { editUser, register } from "@/actions/actions";
 import RegisterSubmitButton from "./RegisterSubmitBtn";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function RegisterUserForm() {
@@ -37,7 +37,6 @@ export default function RegisterUserForm() {
 
   const updateUserWithId = editUser.bind(null, idFromParam);
   const router = useRouter();
-  const pathname = usePathname();
 
   const action = async (formData: FormData) => {
     let name = "";
@@ -60,7 +59,7 @@ export default function RegisterUserForm() {
       email: "",
       name: "",
     });
-    router.push(`${pathname}/?name=${name}`);
+    router.back();
   };
 
   return (

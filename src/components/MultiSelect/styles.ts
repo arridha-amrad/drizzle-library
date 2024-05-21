@@ -4,7 +4,7 @@ import chroma from "chroma-js";
 export const styles: StylesConfig<any, true> = {
   placeholder: (styles) => ({
     ...styles,
-    color: "#eee",
+    color: "#979EAA",
   }),
   valueContainer: (styles) => ({
     ...styles,

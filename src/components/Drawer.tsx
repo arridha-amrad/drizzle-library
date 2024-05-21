@@ -5,7 +5,6 @@ import SidebarBooksButton from "./Sidebar/BooksBtn";
 import HistoriesButton from "./Sidebar/HistoriesBtn";
 import SidebarLoanBooksButton from "./Sidebar/LoanBtn";
 import Navbar from "./Navbar";
-import FilterBooksLink from "./FilterBooksLink";
 
 type Props = {
   children: ReactNode;
@@ -51,7 +50,6 @@ export default function Drawer({ children }: Props) {
           <li className="mt-2">
             <Link href="/add-book">Add Book</Link>
           </li>
-          <FilterBooksLink />
         </ul>
       </div>
     </div>

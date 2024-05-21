@@ -1,4 +1,5 @@
 import { fetchCategories } from "@/actions/bookActions";
+import BookFilterForm from "@/components/BookFilterForm";
 import BooksTable from "@/components/BooksTable/BooksTable";
 
 type Params = {
@@ -17,7 +18,7 @@ export default async function Page({ searchParams }: Props) {
   const categories = await fetchCategories();
   return (
     <section className="xl:px-8 py-2 h-full">
-      {/* <BookFilterForm categories={categories} /> */}
+      <BookFilterForm categories={categories} />
       <BooksTable
         author={author}
         categories={cat ? cat.split(",").map((val) => val.trim()) : []}
