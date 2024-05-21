@@ -1,17 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import SubmitButton from "./SubmitBtn";
-import { CategoriesTable } from "@/drizzle/schema";
 import { searchBooks } from "@/actions/bookActions";
-import MultiSelect from "../MultiSelect";
-import { ChangeEvent, useRef, useState } from "react";
+import { useState, ChangeEvent, useRef, ReactNode } from "react";
+import SubmitButton from "../AddBookForm/SubmitButton";
 
 type Props = {
-  categories: (typeof CategoriesTable.$inferSelect)[];
+  children: ReactNode;
 };
 
-export default function BookFilterForm({ categories }: Props) {
+export default function ModalFilterBooks({ children }: Props) {
+  const router = useRouter();
   const [formState, setFormState] = useState({
     title: "",
     author: "",
@@ -25,7 +24,6 @@ export default function BookFilterForm({ categories }: Props) {
   };
 
   const formRef = useRef<HTMLFormElement | null>(null);
-  const router = useRouter();
 
   const resetFilter = () => {
     formRef.current?.reset();
@@ -35,25 +33,16 @@ export default function BookFilterForm({ categories }: Props) {
     }));
     router.push("/books");
   };
-
   return (
-    <form ref={formRef} action={searchBooks} className="items-center ">
-      <button type="button" onClick={resetFilter} className="btn">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+    <form
+      ref={formRef}
+      action={async (data) => {
+        await searchBooks(data);
+      }}
+      className="modal-box space-y-3"
+    >
+      <h3 className="font-bold text-lg">Filter Books</h3>
+      <div className="w-full bg-base-content">{children}</div>
       <label className="input input-bordered flex items-center gap-2">
         <input
           name="title"
@@ -71,7 +60,6 @@ export default function BookFilterForm({ categories }: Props) {
               title: "",
             })
           }
-          className="btn btn-circle btn-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +89,6 @@ export default function BookFilterForm({ categories }: Props) {
         <button
           type="button"
           onClick={() => setFormState({ ...formState, author: "" })}
-          className="btn btn-circle btn-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -119,10 +106,15 @@ export default function BookFilterForm({ categories }: Props) {
           </svg>
         </button>
       </label>
-      <div className="w-full bg-base-content">
-        <MultiSelect categories={categories} />
+      <div className="modal-action">
+        <SubmitButton />
+        <button type="button" onClick={resetFilter} className="btn">
+          Reset Filter
+        </button>
+        <button type="button" onClick={() => router.back()} className="btn">
+          Close
+        </button>
       </div>
-      <SubmitButton />
     </form>
   );
 }

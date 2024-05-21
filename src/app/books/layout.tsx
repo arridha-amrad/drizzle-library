@@ -1,4 +1,3 @@
-import BookFilterButton from "@/components/BooksFilterButton";
 import { ReactNode, Suspense } from "react";
 
 export default async function Layout({

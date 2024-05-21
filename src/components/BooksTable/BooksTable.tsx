@@ -26,6 +26,7 @@ export default async function BooksTable({
               <th>No</th>
               <th>Title</th>
               <th>Stocks</th>
+              <th>Available</th>
               <th>Author</th>
               <th>Categories</th>
               <th>Actions</th>
@@ -38,10 +39,8 @@ export default async function BooksTable({
                 <td>
                   <Link href={`/books/${book.id}`}>{book.title}</Link>
                 </td>
-                <td>
-                  <div>total : {book.stocks.total}</div>
-                  <div>available : {book.stocks.available}</div>
-                </td>
+                <td>{book.stocks.total}</td>
+                <td>{book.stocks.available}</td>
                 <td>{book.author}</td>
                 <td className="space-x-1">
                   {book.categories.map((cat, i) => (

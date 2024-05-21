@@ -15,7 +15,6 @@ export default function SubmitButton() {
           clipRule="evenodd"
         />
       </svg>
-      Search
     </button>
   );
 }

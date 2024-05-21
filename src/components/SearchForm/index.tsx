@@ -41,8 +41,8 @@ export default function SearchForm() {
         }}
         onKeyUp={() => setPageNum(1)}
         type="text"
-        className="grow"
-        placeholder="Search"
+        className=""
+        placeholder="Search users"
       />
     </label>
   );

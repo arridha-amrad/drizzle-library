@@ -5,6 +5,7 @@ import SidebarBooksButton from "./Sidebar/BooksBtn";
 import HistoriesButton from "./Sidebar/HistoriesBtn";
 import SidebarLoanBooksButton from "./Sidebar/LoanBtn";
 import Navbar from "./Navbar";
+import FilterBooksLink from "./FilterBooksLink";
 
 type Props = {
   children: ReactNode;
@@ -31,7 +32,7 @@ export default function Drawer({ children }: Props) {
             </Link>
           </li>
           <div className="divider divider-start text-neutral-600">Links</div>
-          <li className="mt-4">
+          <li>
             <SidebarUsersButton />
           </li>
           <li className="mt-2">
@@ -44,12 +45,13 @@ export default function Drawer({ children }: Props) {
             <HistoriesButton />
           </li>
           <div className="divider divider-start text-neutral-600">Actions</div>
-          <li className="mt-2">
-            <button className="btn">Add User</button>
+          <li>
+            <Link href="/add-user">Add User</Link>
           </li>
           <li className="mt-2">
-            <button className="btn">Add Book</button>
+            <Link href="/add-book">Add Book</Link>
           </li>
+          <FilterBooksLink />
         </ul>
       </div>
     </div>

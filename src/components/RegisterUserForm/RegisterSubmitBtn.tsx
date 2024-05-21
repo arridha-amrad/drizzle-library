@@ -17,7 +17,7 @@ export default function RegisterSubmitButton({
     <button
       disabled={isDisabled}
       type="submit"
-      className="btn btn-primary disabled:btn-outline"
+      className="btn btn-primary disabled:btn-disabled"
     >
       {pending ? (
         <>

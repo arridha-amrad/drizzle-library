@@ -6,7 +6,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function RegisterForm() {
+export default function RegisterUserForm() {
   const params = useSearchParams();
   const emailFromParam = params.get("email");
   const nameFromParam = params.get("name");
@@ -65,7 +65,10 @@ export default function RegisterForm() {
 
   return (
     <>
-      <form action={action} className="flex w-full flex-1 gap-4 items-center">
+      <form action={action} className="modal-box space-y-3">
+        <div className="mx-auto w-fit">
+          <h1 className="text-lg font-semibold text-base-content">Add User</h1>
+        </div>
         <label className="input w-full input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +107,12 @@ export default function RegisterForm() {
             placeholder="Name"
           />
         </label>
-        <RegisterSubmitButton isDisabled={!state.email || !state.name} />
+        <div className="modal-action">
+          <RegisterSubmitButton isDisabled={!state.email || !state.name} />
+          <button type="button" className="btn" onClick={() => router.back()}>
+            Close
+          </button>
+        </div>
       </form>
     </>
   );

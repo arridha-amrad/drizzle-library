@@ -1,6 +1,6 @@
 "use client";
 
-import ModalAddBookForm from "@/components/AddBookForm/modal";
+import ModalAddBookForm from "@/components/AddBookForm";
 
 export default function ModalPage() {
   return (

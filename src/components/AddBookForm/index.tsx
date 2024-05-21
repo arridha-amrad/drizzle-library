@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import SubmitButton from "./SubmitButton";
 import { toast } from "react-toastify";
 
-export default function ModalAddBookForm() {
+export default function AddBookForm() {
   const router = useRouter();
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    const element = document.getElementById("my_modal_1");
+    const element = document.getElementById("add-book-modal");
     if (open) {
       element?.classList.add("modal-open");
     } else {
@@ -28,7 +28,7 @@ export default function ModalAddBookForm() {
   return (
     <form action={store} className="modal-box space-y-3">
       <div className="mx-auto w-fit">
-        <h1 className="text-lg font-semibold text-base-content">Add Books</h1>
+        <h1 className="text-lg font-semibold text-base-content">Add Book</h1>
       </div>
       <input
         type="text"
