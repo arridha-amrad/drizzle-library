@@ -66,7 +66,9 @@ export default function RegisterUserForm() {
     <>
       <form action={action} className="modal-box space-y-3">
         <div className="mx-auto w-fit">
-          <h1 className="text-lg font-semibold text-base-content">Add User</h1>
+          <h1 className="text-lg font-semibold text-base-content">
+            {isEdit && isEdit === "true" ? "Edit" : "Add"} User
+          </h1>
         </div>
         <label className="input w-full input-bordered flex items-center gap-2">
           <svg
