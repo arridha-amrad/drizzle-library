@@ -5,5 +5,5 @@ type Props = {
 };
 
 export default async function Layout({ children }: Props) {
-  return <main className="px-8 py-4">{children}</main>;
+  return <main className="xl:px-8 px-2 py-4">{children}</main>;
 }

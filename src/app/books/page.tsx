@@ -17,7 +17,7 @@ export default async function Page({ searchParams }: Props) {
   const { author, categories: cat, page, title } = searchParams;
   const categories = await fetchCategories();
   return (
-    <section className="xl:px-8 py-2 h-full">
+    <section className="xl:px-8 px-2 py-2 h-full">
       <BookFilterForm categories={categories} />
       <BooksTable
         author={author}

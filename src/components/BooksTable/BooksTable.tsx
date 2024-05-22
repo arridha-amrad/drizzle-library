@@ -19,7 +19,7 @@ export default async function BooksTable({
 
   return (
     <>
-      <div className="overflow-x-auto h-full py-4">
+      <div className="overflow-x-auto h-full">
         <table className="table">
           <thead>
             <tr>
@@ -67,7 +67,7 @@ export default async function BooksTable({
         </table>
       </div>
 
-      <section className="w-full flex justify-center py-4">
+      <section className="w-full flex justify-center">
         {total > LIMIT_BOOKS && (
           <div className="join">
             {new Array(Math.ceil(total / LIMIT_BOOKS)).fill("").map((_, i) => (

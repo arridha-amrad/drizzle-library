@@ -13,7 +13,7 @@ export default function OpenLoanDialogBtn({
     <button
       disabled={available === 0}
       onClick={() => router.push(`/books/${params.id}/loan`)}
-      className="btn btn-primary"
+      className="btn btn-sm btn-success"
     >
       Loan this book
     </button>

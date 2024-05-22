@@ -22,6 +22,8 @@ const fetchLoanBooks = async ({ page }: Args) => {
   return books;
 };
 
+export type TLoanBook = Awaited<ReturnType<typeof fetchLoanBooks>>[number];
+
 const fetchTotalLoanBooks = async () => {
   const total = await db.select().from(LoanTable);
   return total.length;
@@ -82,7 +84,7 @@ export default async function Page({ searchParams: { page } }: Params) {
 
                 <td>{countCharge(book.loan.dueAt).toString()}</td>
                 <td>
-                  <ReturnBookBtn data={book.loan} />
+                  <ReturnBookBtn data={book} />
                 </td>
               </tr>
             ))}

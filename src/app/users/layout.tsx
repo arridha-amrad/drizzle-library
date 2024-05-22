@@ -4,7 +4,7 @@ import { ReactNode, Suspense } from "react";
 export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <Suspense>
-      <main className="px-12 py-4 w-full">
+      <main className="py-4 xl:px-8 md:px-4 w-full">
         <section className="w-full ">
           <div className="pb-4">
             <SearchForm />

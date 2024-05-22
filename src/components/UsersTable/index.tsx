@@ -42,7 +42,7 @@ export default async function UsersTable({ page, name }: Props) {
               {data.data.map((user, i) => (
                 <tr className="hover cursor-pointer" key={user.id}>
                   <th className="border-r border-base-100">
-                    {i + 1 + (pNum - 1) * 8}
+                    {i + 1 + (pNum - 1) * LIMIT_USERS}
                   </th>
                   <td className="border-r border-base-100">{user.id}</td>
                   <td className="border-r border-base-100">{user.name}</td>

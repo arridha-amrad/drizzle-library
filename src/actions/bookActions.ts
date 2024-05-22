@@ -2,13 +2,14 @@
 
 import db from "@/drizzle/db";
 import {
+  BooksRatingTable,
   BooksTable,
   CategoriesTable,
+  CommentTable,
   LoanHistoriesTable,
   LoanTable,
   users,
 } from "@/drizzle/schema";
-import countCharge from "@/utils/countCharge";
 import { LIMIT_BOOKS } from "@/variables";
 import { and, arrayContains, asc, desc, eq, ilike } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -212,12 +213,19 @@ export const getBookDetail = async (bookId: string) => {
   return book;
 };
 
-export const returnBook = async (args: typeof LoanTable.$inferSelect) => {
-  const { bookId, userId, createdAt: loanAt, dueAt } = args;
+export const returnBookAction = async (data: FormData) => {
+  const loanAt = new Date(data.get("loanAt") as string);
+  const charge = parseInt(data.get("charge") as string);
+  const userId = parseInt(data.get("userId") as string);
+  const bookId = data.get("bookId") as string;
+  const comment = String(data.get("comment"));
+  const rating = parseFloat(data.get("rating") as string);
+
   const book = await db
     .select()
     .from(BooksTable)
     .where(eq(BooksTable.id, bookId));
+
   await db.transaction(async (tx) => {
     // delete from loan table
     await tx
@@ -235,16 +243,31 @@ export const returnBook = async (args: typeof LoanTable.$inferSelect) => {
       })
       .where(eq(BooksTable.id, bookId));
 
+    // insert into comment table
+    const commentResult = await db
+      .insert(CommentTable)
+      .values({ content: comment })
+      .returning({
+        commentId: CommentTable.id,
+      });
+
+    // insert into book rating table
+    await tx.insert(BooksRatingTable).values({
+      bookId,
+      value: rating,
+      userId,
+      commentId: commentResult[0].commentId,
+    });
+
     // insert into loan histories
     await tx.insert(LoanHistoriesTable).values({
       bookId,
       userId,
       loanAt,
       returnAt: new Date(),
-      charge: countCharge(dueAt),
+      charge,
     });
   });
-
   revalidatePath("/loan");
   revalidatePath("/histories");
 };

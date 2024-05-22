@@ -1,10 +1,12 @@
 import { relations } from "drizzle-orm";
 import {
   bigint,
+  decimal,
   integer,
   jsonb,
   pgTable,
   primaryKey,
+  real,
   serial,
   text,
   timestamp,
@@ -73,15 +75,49 @@ export const LoanHistoriesTable = pgTable("loan_histories", {
   charge: bigint("charge", { mode: "number" }).notNull().default(0),
 });
 
+export const BooksRatingTable = pgTable("books_ratings", {
+  id: serial("id").primaryKey(),
+  bookId: uuid("book_id")
+    .notNull()
+    .references(() => BooksTable.id),
+  value: real("value").notNull(),
+  userId: serial("user_id")
+    .notNull()
+    .references(() => users.id),
+  commentId: serial("comment_id").references(() => CommentTable.id),
+});
+
+export const CommentTable = pgTable("books_comment", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+});
+
 // Relations
 export const UsersRelation = relations(users, ({ many }) => ({
   usersToLoanBooks: many(LoanTable),
   userToLoanHistories: many(LoanHistoriesTable),
+  usersToRateBooks: many(BooksRatingTable),
 }));
 
 export const BooksRelation = relations(BooksTable, ({ many }) => ({
   booksToLoanUsers: many(LoanTable),
   userToLoanHistories: many(LoanHistoriesTable),
+  booksRating: many(BooksRatingTable),
+}));
+
+export const BookRatingsRelations = relations(BooksRatingTable, ({ one }) => ({
+  book: one(BooksTable, {
+    fields: [BooksRatingTable.bookId],
+    references: [BooksTable.id],
+  }),
+  user: one(users, {
+    fields: [BooksRatingTable.userId],
+    references: [users.id],
+  }),
+  comment: one(CommentTable, {
+    fields: [BooksRatingTable.commentId],
+    references: [CommentTable.id],
+  }),
 }));
 
 export const UserToLoanBooksRelation = relations(LoanTable, ({ one }) => ({
