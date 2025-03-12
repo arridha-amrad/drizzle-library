@@ -26,7 +26,7 @@ export default function AddBookForm() {
     router.back();
   };
   return (
-    <form action={store} className="modal-box space-y-3">
+    <form action={store} className="modal-box w-full max-w-md space-y-3">
       <div className="mx-auto w-fit">
         <h1 className="text-lg font-semibold text-base-content">Add Book</h1>
       </div>
@@ -34,32 +34,32 @@ export default function AddBookForm() {
         type="text"
         name="title"
         placeholder="Title"
-        className="input input-bordered w-full"
+        className="input input-neutral w-full"
       />
       <input
         type="text"
         name="author"
         placeholder="Author"
-        className="input input-bordered w-full"
+        className="input input-neutral w-full"
       />
       <input
         type="text"
         name="categories"
         placeholder="Categories"
-        className="input input-bordered w-full"
+        className="input input-neutral w-full"
       />
       <div className="modal-action">
-        <SubmitButton />
         <button
           type="button"
           onClick={() => {
             router.back();
             setOpen(false);
           }}
-          className="btn"
+          className="btn btn-neutral"
         >
           Close
         </button>
+        <SubmitButton />
       </div>
     </form>
   );

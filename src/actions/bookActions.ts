@@ -12,7 +12,7 @@ import {
 } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
 import { and, arrayContains, asc, desc, eq, ilike } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const fetchCategories = async () => {
@@ -57,7 +57,7 @@ export const storeBooks = async (data: FormData) => {
       .values(arrCategories.map((val) => ({ name: val.toLowerCase() })))
       .onConflictDoNothing({});
   });
-  revalidatePath("/books");
+  revalidateTag("books");
 };
 
 const getBooks = async ({
@@ -118,7 +118,7 @@ export const fetchBooks = async (props: BooksFilterProps) => {
   return { total, books };
 };
 
-export const deleteBooks = async (id: string) => {
+export const deleteBook = async (id: string) => {
   await db.delete(BooksTable).where(eq(BooksTable.id, id));
   revalidatePath("/books");
 };

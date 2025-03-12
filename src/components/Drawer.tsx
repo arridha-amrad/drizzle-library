@@ -18,13 +18,13 @@ export default function Drawer({ children }: Props) {
         <Navbar />
         {children}
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side ">
         <label
           htmlFor="my-drawer"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu w-60 min-h-full bg-base-200 text-base-content">
+        <ul className="menu w-52 min-h-full bg-base-200 text-base-content">
           <li className="w-full">
             <Link href="/" className="font-bold text-xl text-center w-full">
               Library
@@ -45,10 +45,14 @@ export default function Drawer({ children }: Props) {
           </li>
           <div className="divider divider-start text-neutral-600">Actions</div>
           <li>
-            <Link href="/add-user">Add User</Link>
+            <Link href="/add-user" scroll={false}>
+              Add User
+            </Link>
           </li>
           <li className="mt-2">
-            <Link href="/add-book">Add Book</Link>
+            <Link href="/add-book" scroll={false}>
+              Add Book
+            </Link>
           </li>
         </ul>
       </div>

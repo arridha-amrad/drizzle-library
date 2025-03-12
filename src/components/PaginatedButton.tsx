@@ -16,8 +16,8 @@ export default function PaginateButton({ number }: { number: number }) {
   return (
     <Link
       href={`${pathname}?${qpStr}`}
-      className={`join-item btn btn-md  ${
-        Number(page) === number ? "btn-active" : ""
+      className={`join-item btn btn-md ${
+        Number(page) === number ? "btn-active bg-primary" : ""
       }`}
     >
       {number}

@@ -1,11 +1,12 @@
 import LoanListTable from "@/components/Tables/LoanListTable";
 
 type Params = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default async function LoanList({ params }: Params) {
-  return <LoanListTable bookId={params.id} />;
+  const { id } = await params;
+  return <LoanListTable bookId={id} />;
 }

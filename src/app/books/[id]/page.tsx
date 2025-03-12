@@ -4,18 +4,16 @@ import Tab from "@/components/Tab";
 import LoanListTable from "@/components/Tables/LoanListTable";
 
 type Params = {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     tab?: string | null;
-  };
+  }>;
 };
 
-export default async function Page({
-  params: { id },
-  searchParams: { tab },
-}: Params) {
+export default async function Page({ params, searchParams }: Params) {
+  const [{ id }, { tab }] = await Promise.all([params, searchParams]);
   return (
     <section className="py-4">
       <BookTable id={id} />
