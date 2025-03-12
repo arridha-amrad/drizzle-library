@@ -21,12 +21,13 @@ const sumCharge = async () => {
 };
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     page?: number;
-  };
+  }>;
 };
 
-export default async function Page({ searchParams: { page } }: Props) {
+export default async function Page({ searchParams }: Props) {
+  const { page } = await searchParams;
   const [histories, balance] = await Promise.all([
     await fetchHistories(),
     await sumCharge(),

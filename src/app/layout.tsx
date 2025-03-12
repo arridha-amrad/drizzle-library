@@ -22,7 +22,7 @@ export default function RootLayout({
   modal: ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html data-theme="dracula" lang="en">
       <body
         className={`${inter.className} xl:container w-full mx-auto min-h-screen`}
       >

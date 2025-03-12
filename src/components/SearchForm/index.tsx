@@ -20,7 +20,7 @@ export default function SearchForm() {
   }, [debouncedSearchTerm]);
 
   return (
-    <label className="input flex items-center gap-2">
+    <label className="input input-neutral flex items-center gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"

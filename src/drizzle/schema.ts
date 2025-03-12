@@ -57,9 +57,7 @@ export const LoanTable = pgTable(
     // due after 10 days from created_at
     dueAt: timestamp("due_at").$defaultFn(setDue).notNull(),
   },
-  (table) => ({
-    pk: primaryKey({ columns: [table.bookId, table.userId] }),
-  })
+  (table) => [primaryKey({ columns: [table.bookId, table.userId] })]
 );
 
 export const LoanHistoriesTable = pgTable("loan_histories", {

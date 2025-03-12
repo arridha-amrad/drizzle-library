@@ -30,12 +30,13 @@ const fetchTotalLoanBooks = async () => {
 };
 
 type Params = {
-  searchParams: {
+  searchParams: Promise<{
     page?: number;
-  };
+  }>;
 };
 
-export default async function Page({ searchParams: { page } }: Params) {
+export default async function Page({ searchParams }: Params) {
+  const { page } = await searchParams;
   const [books, total] = await Promise.all([
     fetchLoanBooks({ page }),
     fetchTotalLoanBooks(),

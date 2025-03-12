@@ -104,18 +104,18 @@ export const search = async (name: string, page: number) => {
   return { data, total };
 };
 
-export const setUsersPageCookies = (page: number) => {
-  cookies().set({
+export const setUsersPageCookies = async (page: number) => {
+  const cookie = await cookies();
+  cookie.set({
     name: "users-page",
     value: String(page),
   });
 };
 
-export const setUserSearchPageCookie = (page: number, name: string) => {
+export const setUserSearchPageCookie = async (page: number, name: string) => {
   const data = JSON.stringify({ page: String(page), name });
-  console.log(data);
-
-  cookies().set({
+  const cookie = await cookies();
+  cookie.set({
     name: "users-search-page",
     value: data,
   });

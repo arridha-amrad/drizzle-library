@@ -5,8 +5,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <Suspense>
       <main className="py-4 xl:px-8 md:px-4 w-full">
-        <section className="w-full ">
-          <div className="pb-4">
+        <section className="w-full">
+          <div className="pb-4 flex">
             <SearchForm />
           </div>
           {children}
