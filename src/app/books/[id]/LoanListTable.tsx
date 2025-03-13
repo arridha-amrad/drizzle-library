@@ -36,6 +36,10 @@ type Props = {
   bookId: string;
 };
 
+const className = {
+  col: "",
+};
+
 export default async function LoanListTable({ bookId }: Props) {
   const loanList = await getBookLoanData(bookId);
 

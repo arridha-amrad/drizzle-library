@@ -6,6 +6,7 @@ import { users } from "../drizzle/schema";
 import { desc, eq, ilike } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { LIMIT_USERS } from "../variables";
+import { CACHE_KEY } from "@/cacheKeys";
 
 export const register = async (data: FormData) => {
   const email = data.get("email");
@@ -27,44 +28,6 @@ export const register = async (data: FormData) => {
 type FetchProps = {
   page: number;
   name?: string;
-};
-
-const getTotal = async (name?: string) => {
-  const total = (
-    await db
-      .select()
-      .from(users)
-      .where(name ? ilike(users.name, `%${name}%`) : undefined)
-  ).length;
-  return total;
-};
-
-const getUsers = async (page: number, name?: string) => {
-  const data = await db
-    .select()
-    .from(users)
-    .where(name ? ilike(users.name, `%${name}%`) : undefined)
-    .orderBy(desc(users.createdAt))
-    .limit(LIMIT_USERS)
-    .offset((Number(page) - 1) * LIMIT_USERS);
-  return data;
-};
-
-export const fetchUsers = unstable_cache(
-  async (props: FetchProps) => {
-    const [total, data] = await Promise.all([
-      getTotal(props.name),
-      getUsers(props.page, props.name),
-    ]);
-    return { data, total };
-  },
-  ["users"],
-  { tags: ["users"] }
-);
-
-export const removeUser = async (id: number) => {
-  await db.delete(users).where(eq(users.id, id));
-  revalidateTag("users");
 };
 
 export const editUser = async (id: string | null, data: FormData) => {

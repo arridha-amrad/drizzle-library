@@ -14,7 +14,7 @@ export default function EditUserButton({ user }: { user: User }) {
     );
   };
   return (
-    <button onClick={setParams} className="btn btn-sm btn-info">
+    <button onClick={setParams} className="btn btn-accent">
       edit
     </button>
   );
