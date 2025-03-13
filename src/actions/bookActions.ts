@@ -1,5 +1,6 @@
 "use server";
 
+import { CACHE_KEY } from "@/cacheKeys";
 import db from "@/drizzle/db";
 import {
   BooksRatingTable,
@@ -8,12 +9,42 @@ import {
   CommentTable,
   LoanHistoriesTable,
   LoanTable,
-  users,
 } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
-import { and, arrayContains, asc, desc, eq, ilike } from "drizzle-orm";
+import { and, arrayContains, asc, count, eq, ilike } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
+
+export const updateBookTitle = async (_: any, data: FormData, id: string) => {
+  const validationResult = z
+    .object({
+      title: z.string().min(5),
+    })
+    .safeParse({
+      title: data.get("title"),
+    });
+  if (!validationResult.success) {
+    return {
+      validationErrors: validationResult.error.formErrors.fieldErrors,
+    };
+  }
+  const validData = validationResult.data;
+  const result = await db
+    .update(BooksTable)
+    .set({ title: validData.title })
+    .where(eq(BooksTable.id, id));
+  if (result.rowCount && result.rowCount > 0) {
+    revalidateTag(CACHE_KEY.books);
+    revalidateTag(CACHE_KEY.bookDetail);
+    return {
+      success: true,
+    };
+  }
+  return {
+    actionError: "Something went wrong",
+  };
+};
 
 export const fetchCategories = async () => {
   return db.select().from(CategoriesTable);
@@ -123,27 +154,45 @@ export const deleteBook = async (id: string) => {
   revalidatePath("/books");
 };
 
-export const loanABook = async (bookId: string, data: FormData) => {
-  const userId = data.get("userId") as string;
-  const userTotalLoan = await db
-    .select()
-    .from(LoanTable)
-    .where(eq(LoanTable.userId, Number(userId)));
+export const loanABook = async (_: any, data: FormData) => {
+  const { bookId, userId } = Object.fromEntries(data.entries());
 
-  if (userTotalLoan.length >= 4) {
+  const validatedSchema = z
+    .object({
+      userId: z.string().transform((v) => parseInt(v)),
+      bookId: z.string(),
+    })
+    .safeParse({ bookId, userId });
+
+  if (!validatedSchema.success) {
     return {
-      error: "User has loaned 4 books.",
+      validationErrors: validatedSchema.error.formErrors.fieldErrors,
     };
   }
 
+  const validBookId = validatedSchema.data.bookId;
+  const validUserId = validatedSchema.data.userId;
+
+  // The maximum number of books a user can borrow is 4
+  const userTotalLoan = await db
+    .select({ count: count() })
+    .from(LoanTable)
+    .where(eq(LoanTable.userId, validUserId))
+    .then((res) => res[0].count);
+  if (userTotalLoan >= 4) {
+    return {
+      actionError: "User has loaned 4 books.",
+    };
+  }
+
+  // Make sure the book is available
   const book = await db
     .select()
     .from(BooksTable)
-    .where(eq(BooksTable.id, bookId));
-
+    .where(eq(BooksTable.id, validBookId));
   if (book[0].stocks.available === 0) {
     return {
-      error: "un available stock",
+      actionError: "un available stock",
     };
   }
 
@@ -151,66 +200,36 @@ export const loanABook = async (bookId: string, data: FormData) => {
     .select()
     .from(LoanTable)
     .where(
-      and(eq(LoanTable.userId, Number(userId)), eq(LoanTable.bookId, bookId))
+      and(eq(LoanTable.userId, validUserId), eq(LoanTable.bookId, validBookId))
     );
-
   if (isLoanedSameBook.length > 0) {
     return {
-      error: "The user has been loaning this book",
+      actionError: "The user has been loaning this book",
     };
   }
 
-  try {
-    await db.transaction(async (tx) => {
-      await tx.insert(LoanTable).values({ bookId, userId: Number(userId) });
-      await db
-        .update(BooksTable)
-        .set({
-          stocks: {
-            total: 3,
-            available: book[0].stocks.available - 1,
-          },
-        })
-        .where(eq(BooksTable.id, book[0].id));
+  await db.transaction(async (tx) => {
+    await tx.insert(LoanTable).values({
+      bookId: validBookId,
+      userId: validUserId,
     });
-    revalidatePath(`/books/${bookId}`);
-    revalidatePath(`/books`);
-    revalidatePath("/loan");
-  } catch (err: any) {
-    throw new Error(err);
-  }
-};
+    await db
+      .update(BooksTable)
+      .set({
+        stocks: {
+          total: 3,
+          available: book[0].stocks.available - 1,
+        },
+      })
+      .where(eq(BooksTable.id, book[0].id));
+  });
 
-export const getBookLoanData = async (bookId: string) => {
-  const data = await db
-    .select({
-      loan: {
-        dueAt: LoanTable.dueAt,
-        loanAt: LoanTable.createdAt,
-      },
-      user: {
-        name: users.name,
-        id: users.id,
-      },
-      book: {
-        title: BooksTable.title,
-        id: BooksTable.id,
-      },
-    })
-    .from(LoanTable)
-    .where(eq(LoanTable.bookId, bookId))
-    .innerJoin(users, eq(users.id, LoanTable.userId))
-    .innerJoin(BooksTable, eq(LoanTable.bookId, BooksTable.id))
-    .orderBy(desc(LoanTable.createdAt));
-  return data;
-};
+  revalidateTag(CACHE_KEY.books);
+  revalidateTag(CACHE_KEY.bookDetail);
 
-export const getBookDetail = async (bookId: string) => {
-  const book = await db
-    .select()
-    .from(BooksTable)
-    .where(eq(BooksTable.id, bookId));
-  return book;
+  return {
+    success: true,
+  };
 };
 
 export const returnBookAction = async (data: FormData) => {

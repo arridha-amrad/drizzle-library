@@ -25,10 +25,12 @@ export default function Drawer({ children }: Props) {
           className="drawer-overlay"
         ></label>
         <ul className="menu w-72 min-h-full bg-base-200 text-base-content">
-          <li className="w-full">
-            <Link href="/" className="font-bold text-xl text-center w-full">
-              Library
-            </Link>
+          <li className="w-full ">
+            <div className="flex h-[6rem]">
+              <Link href="/" className="font-bold text-xl w-full">
+                Drizzle Library
+              </Link>
+            </div>
           </li>
           <div className="divider divider-start text-neutral-600">Links</div>
           <li>

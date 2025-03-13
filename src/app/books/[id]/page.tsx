@@ -1,7 +1,7 @@
-import BookTable from "@/components/BookTable";
-import BookReviews from "@/components/Review";
-import Tab from "@/components/Tab";
-import LoanListTable from "@/components/Tables/LoanListTable";
+import Tab from "./Tab";
+import LoanListTable from "./LoanListTable";
+import BookTable from "./BookTable";
+import BookReviews from "./Review";
 
 type Params = {
   params: Promise<{
@@ -18,7 +18,7 @@ export default async function Page({ params, searchParams }: Params) {
     <section className="py-4">
       <BookTable id={id} />
       <Tab />
-      {tab === "review" ? (
+      {tab === "reviews" ? (
         <BookReviews bookId={id} />
       ) : (
         <LoanListTable bookId={id} />

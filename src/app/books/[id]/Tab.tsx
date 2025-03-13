@@ -16,20 +16,24 @@ export default function Tab() {
   }, [q.get("tab")]);
 
   return (
-    <div role="tablist" className="tabs tabs-boxed my-4">
+    <div role="tablist" className="tabs mb-4 mt-10">
       <Link
-        href={`${pathname}?tab=join-list`}
+        href={`${pathname}?tab=borrowers`}
         role="tab"
         className={`tab ${
-          tab === "join-list" || tab === "" ? "tab-active" : ""
+          tab === "borrowers" || tab === ""
+            ? "tab-active text-xl font-semibold"
+            : ""
         }`}
       >
-        Loan List
+        List of Borrowers
       </Link>
       <Link
-        href={`${pathname}?tab=review`}
+        href={`${pathname}?tab=reviews`}
         role="tab"
-        className={`tab ${tab === "review" ? "tab-active" : ""}`}
+        className={`tab ${
+          tab === "reviews" ? "tab-active text-xl font-semibold" : ""
+        }`}
       >
         Review
       </Link>

@@ -1,14 +1,14 @@
-import BooksTable from "@/components/BooksTable/BooksTable";
+import BooksTable from "@/app/books/BooksTable/BooksTable";
 
-import SearchBookForm from "@/components/BooksTable/SearchForm";
+import SearchBookForm from "@/app/books/SearchForm";
 import PaginateButton from "@/components/PaginatedButton";
-import { LIMIT_BOOKS } from "@/variables";
-import FilterBooks from "./FilterBooks/FilterBooks";
-import Header from "./Header";
 import { db } from "@/drizzle/migrate";
-import { and, ilike, arrayContains, asc, count } from "drizzle-orm";
-import { unstable_cache } from "next/cache";
 import { BooksTable as BT } from "@/drizzle/schema";
+import { LIMIT_BOOKS } from "@/variables";
+import { and, arrayContains, asc, count, ilike } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
+import FilterBooks from "./FilterBooks";
+import Header from "./Header";
 
 export const getBooks = unstable_cache(
   async (
@@ -17,8 +17,6 @@ export const getBooks = unstable_cache(
     title?: string,
     categories?: string[]
   ) => {
-    console.log("categories : ", categories);
-
     const filters = and(
       author && author !== "null" ? ilike(BT.author, `%${author}%`) : undefined,
       title && title !== "null" ? ilike(BT.title, `%${title}%`) : undefined,
