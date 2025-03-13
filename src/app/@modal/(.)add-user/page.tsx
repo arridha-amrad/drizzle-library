@@ -1,9 +1,12 @@
 import RegisterForm from "@/components/RegisterUserForm";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
     <dialog id="add-user-modal" className="modal modal-open">
-      <RegisterForm />
+      <Suspense>
+        <RegisterForm />
+      </Suspense>
     </dialog>
   );
 }

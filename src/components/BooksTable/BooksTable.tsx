@@ -49,8 +49,8 @@ export default async function Table({
                     <h2>{book.author}</h2>
                   </div>
                 </td>
-                <td className="border-r border-base-content/10">
-                  <div className="space-x-1 line-clamp-2 w-fit">
+                <td className="border-r max-w-[200px] border-base-content/10">
+                  <div className="space-x-1 line-clamp-1">
                     {book.categories.map((cat, i) => (
                       <Link
                         key={i}
