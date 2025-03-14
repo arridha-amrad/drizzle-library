@@ -1,61 +1,12 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1715463267828,
-      "tag": "0000_thin_maverick",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1715674667110,
-      "tag": "0001_clumsy_siren",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1715676022492,
-      "tag": "0002_married_shooting_star",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1715682234676,
-      "tag": "0003_oval_polaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1715936929572,
-      "tag": "0004_rainy_vivisector",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1715938665593,
-      "tag": "0005_opposite_quentin_quire",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1716120102924,
-      "tag": "0006_stiff_miracleman",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1716388364924,
-      "tag": "0007_zippy_moonstone",
+      "version": "7",
+      "when": 1741967129007,
+      "tag": "0000_nice_skin",
       "breakpoints": true
     }
   ]

@@ -2,27 +2,28 @@ import UsersTable from "@/app/users/UsersTable";
 import PaginateButton from "@/components/PaginatedButton";
 import SearchForm from "@/components/SearchForm";
 import db from "@/drizzle/db";
-import { users } from "@/drizzle/schema";
+import { UsersTable as UT } from "@/drizzle/schema";
 import { LIMIT_USERS } from "@/variables";
 import { ilike, desc, count } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { Suspense } from "react";
 import Header from "./Header";
+import { CACHE_KEY } from "@/cacheKeys";
 
 export const fetchUsers = unstable_cache(
   async (page?: number, name?: string) => {
-    const filters = name ? ilike(users.name, `%${name}%`) : undefined;
+    const filters = name ? ilike(UT.name, `%${name}%`) : undefined;
     const u = await db
       .select()
-      .from(users)
+      .from(UT)
       .where(filters)
-      .orderBy(desc(users.createdAt))
+      .orderBy(desc(UT.createdAt))
       .limit(LIMIT_USERS)
       .offset((Number(page) - 1) * LIMIT_USERS);
 
     const sum = await db
       .select({ count: count() })
-      .from(users)
+      .from(UT)
       .where(filters)
       .then((res) => res[0].count);
 
@@ -31,8 +32,8 @@ export const fetchUsers = unstable_cache(
       total: sum,
     };
   },
-  ["users"],
-  { tags: ["users"] }
+  [CACHE_KEY.users],
+  { tags: [CACHE_KEY.users] }
 );
 
 type Props = {

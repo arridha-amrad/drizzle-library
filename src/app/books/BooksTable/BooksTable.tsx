@@ -2,7 +2,7 @@ import { BooksTable } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
 import Link from "next/link";
 import BookTableTitle from "./Title";
-import DeleteBookButton from "@/components/DeleteBookBtn";
+import DeleteBookButton from "./DeleteBookBtn";
 
 type Book = typeof BooksTable.$inferSelect;
 
@@ -30,9 +30,11 @@ export default async function Table({
           </thead>
           <tbody>
             {books.length === 0 ? (
-              <div className="p-4 text-center">
-                <h1 className="text-xl font-semibold">Books not found</h1>
-              </div>
+              <tr>
+                <td>
+                  <h1 className="text-xl font-semibold">Books not found</h1>
+                </td>
+              </tr>
             ) : (
               books.map((book, i) => (
                 <tr key={book.id}>
@@ -41,10 +43,10 @@ export default async function Table({
                   </td>
                   <BookTableTitle id={book.id} title={book.title} />
                   <td className="text-center border-r border-base-content/10">
-                    {book.stocks.total}
+                    {book.stocks}
                   </td>
                   <td className="text-center border-r border-base-content/10">
-                    {book.stocks.available}
+                    {book.available}
                   </td>
                   <td className="w-max border-r border-base-content/10">
                     <div className="w-max">

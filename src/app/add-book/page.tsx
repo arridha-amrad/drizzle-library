@@ -1,8 +1,10 @@
+import AddBookForm from "@/components/AddBookForm";
+
 export default function Page() {
   return (
-    <section>
-      <div>
-        <h1>Add Book Page</h1>
+    <section className="flex items-center justify-center min-h-screen">
+      <div className="p-8 border w-[400px] rounded-lg border-base-content/10">
+        <AddBookForm />
       </div>
     </section>
   );

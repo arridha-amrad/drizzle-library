@@ -2,13 +2,13 @@ import BooksTable from "@/app/books/BooksTable/BooksTable";
 
 import SearchBookForm from "@/app/books/SearchForm";
 import PaginateButton from "@/components/PaginatedButton";
-import { db } from "@/drizzle/migrate";
 import { BooksTable as BT } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
-import { and, arrayContains, asc, count, ilike } from "drizzle-orm";
+import { and, arrayContains, asc, count, desc, ilike } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import FilterBooks from "./FilterBooks";
 import Header from "./Header";
+import db from "@/drizzle/db";
 
 export const getBooks = unstable_cache(
   async (
@@ -29,7 +29,7 @@ export const getBooks = unstable_cache(
         .select()
         .from(BT)
         .where(filters)
-        .orderBy(asc(BT.title))
+        .orderBy(desc(BT.title))
         .limit(LIMIT_BOOKS)
         .offset(page ? (page - 1) * LIMIT_BOOKS : 0);
 

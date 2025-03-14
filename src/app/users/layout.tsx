@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  return <main className="xl:px-8 md:px-4 w-full">{children}</main>;
+  return <main className="w-full">{children}</main>;
 }

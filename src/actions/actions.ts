@@ -1,51 +1,15 @@
 "use server";
 
 import { revalidateTag, unstable_cache } from "next/cache";
-import { db } from "../drizzle/migrate";
-import { users } from "../drizzle/schema";
+import { UsersTable } from "../drizzle/schema";
 import { desc, eq, ilike } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { LIMIT_USERS } from "../variables";
 import { CACHE_KEY } from "@/cacheKeys";
 
-export const register = async (data: FormData) => {
-  const email = data.get("email");
-  const name = data.get("name");
-  if (!email || !name) return;
-
-  const result = await db
-    .insert(users)
-    .values({
-      email: String(email),
-      name: String(name),
-    })
-    .returning({ name: users.name });
-
-  revalidateTag("users");
-  return result[0].name;
-};
-
 type FetchProps = {
   page: number;
   name?: string;
-};
-
-export const editUser = async (id: string | null, data: FormData) => {
-  const email = data.get("email");
-  const name = data.get("name");
-
-  if (!email || !name || !id) return;
-
-  const result = await db
-    .update(users)
-    .set({
-      email: String(email),
-      name: String(name),
-    })
-    .returning({ name: users.name })
-    .where(eq(users.id, parseInt(id)));
-  revalidateTag("users");
-  return result[0].name;
 };
 
 export const search = async (name: string, page: number) => {

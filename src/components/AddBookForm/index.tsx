@@ -1,66 +1,116 @@
 "use client";
 
-import { storeBooks } from "@/actions/bookActions";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
-import SubmitButton from "./SubmitButton";
 import { toast } from "react-toastify";
+import { addNewBook } from "./action";
 
-export default function AddBookForm() {
+const initialState = {
+  validationErrors: undefined,
+  actionError: undefined,
+  success: false,
+};
+
+type Props = {
+  isShowCancelButton?: boolean;
+};
+
+export default function AddBookForm({ isShowCancelButton }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [title, setTitle] = useState("");
+
+  const [actionState, action, pending] = useActionState(
+    addNewBook,
+    initialState
+  );
+
+  const ve = actionState.validationErrors;
 
   useEffect(() => {
-    const element = document.getElementById("add-book-modal");
-    if (open) {
-      element?.classList.add("modal-open");
-    } else {
-      element?.classList.remove("modal-open");
+    if (actionState.success) {
+      toast.success("New book added");
+      (document.getElementById("modal_add_book") as HTMLDialogElement)?.close();
+      router.push(`/books?title=${title}`);
     }
-  }, [open]);
+  }, [actionState.success]);
 
-  const store = async (data: FormData) => {
-    await storeBooks(data);
-    toast.success("New book added");
-    router.back();
-  };
+  useEffect(() => {
+    if (actionState.actionError) {
+      toast.error("New book added");
+    }
+  }, [actionState.actionError]);
+
   return (
-    <form action={store} className="modal-box w-full max-w-md space-y-3">
-      <div className="mx-auto w-fit">
-        <h1 className="text-lg font-semibold text-base-content">Add Book</h1>
-      </div>
-      <input
-        type="text"
-        name="title"
-        placeholder="Title"
-        className="input input-neutral w-full"
-      />
-      <input
-        type="text"
-        name="author"
-        placeholder="Author"
-        className="input input-neutral w-full"
-      />
-      <input
-        type="text"
-        name="categories"
-        placeholder="Categories"
-        className="input input-neutral w-full"
-      />
-      <div className="modal-action">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-            setOpen(false);
-          }}
-          className="btn btn-neutral"
-        >
-          Close
-        </button>
-        <SubmitButton />
-      </div>
-    </form>
+    <fieldset disabled={pending}>
+      <form action={action} className="w-full space-y-3">
+        <h3 className="font-bold text-lg">Add new book</h3>
+        <fieldset className="fieldset">
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="input w-full input-neutral"
+            placeholder="Book's title"
+          />
+          {ve && ve.title && (
+            <p className="fieldset-label text-error">{ve.title[0]}</p>
+          )}
+        </fieldset>
+        <fieldset className="fieldset">
+          <input
+            type="text"
+            name="author"
+            className="input w-full input-neutral"
+            placeholder="Book's author"
+          />
+          {ve && ve.author && (
+            <p className="fieldset-label text-error">{ve.author[0]}</p>
+          )}
+        </fieldset>
+        <fieldset className="fieldset">
+          <input
+            type="number"
+            name="stocks"
+            className="input w-full input-neutral"
+            placeholder="Book's stocks"
+          />
+          {ve && ve.stocks && (
+            <p className="fieldset-label text-error">{ve.stocks[0]}</p>
+          )}
+        </fieldset>
+        <fieldset className="fieldset">
+          <input
+            type="text"
+            name="categories"
+            className="input w-full input-neutral"
+            placeholder="Book's categories"
+          />
+          {ve && ve.categories && (
+            <p className="fieldset-label text-error">{ve.categories[0]}</p>
+          )}
+        </fieldset>
+        <div className="flex justify-end gap-3">
+          {isShowCancelButton && (
+            <button
+              type="button"
+              onClick={() => {
+                (
+                  document.getElementById("modal_add_book") as HTMLDialogElement
+                )?.close();
+                router.back();
+              }}
+              className="btn btn-neutral"
+            >
+              Close
+            </button>
+          )}
+          <button type="submit" className="btn btn-primary">
+            Add
+          </button>
+        </div>
+      </form>
+    </fieldset>
   );
 }

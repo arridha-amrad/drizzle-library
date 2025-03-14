@@ -3,12 +3,10 @@
 import { CACHE_KEY } from "@/cacheKeys";
 import db from "@/drizzle/db";
 import {
-  BooksRatingTable,
   BooksTable,
-  CategoriesTable,
-  CommentTable,
-  LoanHistoriesTable,
-  LoanTable,
+  HistoriesTable,
+  LoansTable,
+  ReviewsTable,
 } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
 import { and, arrayContains, asc, count, eq, ilike } from "drizzle-orm";
@@ -46,10 +44,6 @@ export const updateBookTitle = async (_: any, data: FormData, id: string) => {
   };
 };
 
-export const fetchCategories = async () => {
-  return db.select().from(CategoriesTable);
-};
-
 export const searchBooks = async (data: FormData) => {
   const { title, author } = Object.fromEntries(data.entries());
   const cat = data.getAll("categories") as string[];
@@ -70,25 +64,6 @@ export const searchBooks = async (data: FormData) => {
     ...(title && { title: String(title) }),
   });
   redirect(`/books?${params}`);
-};
-
-export const storeBooks = async (data: FormData) => {
-  const values = Object.fromEntries(data.entries());
-  const { title, categories, author } = values;
-  const arrCategories = String(categories).split(",");
-  if (!title || !categories || !author) return;
-  await db.transaction(async (tx) => {
-    await tx.insert(BooksTable).values({
-      author: String(author),
-      categories: arrCategories.map((text) => text.trim().toLowerCase()),
-      title: String(title),
-    });
-    await tx
-      .insert(CategoriesTable)
-      .values(arrCategories.map((val) => ({ name: val.toLowerCase() })))
-      .onConflictDoNothing({});
-  });
-  revalidateTag("books");
 };
 
 const getBooks = async ({
@@ -149,11 +124,6 @@ export const fetchBooks = async (props: BooksFilterProps) => {
   return { total, books };
 };
 
-export const deleteBook = async (id: string) => {
-  await db.delete(BooksTable).where(eq(BooksTable.id, id));
-  revalidatePath("/books");
-};
-
 export const loanABook = async (_: any, data: FormData) => {
   const { bookId, userId } = Object.fromEntries(data.entries());
 
@@ -176,8 +146,8 @@ export const loanABook = async (_: any, data: FormData) => {
   // The maximum number of books a user can borrow is 4
   const userTotalLoan = await db
     .select({ count: count() })
-    .from(LoanTable)
-    .where(eq(LoanTable.userId, validUserId))
+    .from(LoansTable)
+    .where(eq(LoansTable.userId, validUserId))
     .then((res) => res[0].count);
   if (userTotalLoan >= 4) {
     return {
@@ -190,7 +160,7 @@ export const loanABook = async (_: any, data: FormData) => {
     .select()
     .from(BooksTable)
     .where(eq(BooksTable.id, validBookId));
-  if (book[0].stocks.available === 0) {
+  if (book[0].available === 0) {
     return {
       actionError: "un available stock",
     };
@@ -198,9 +168,12 @@ export const loanABook = async (_: any, data: FormData) => {
 
   const isLoanedSameBook = await db
     .select()
-    .from(LoanTable)
+    .from(LoansTable)
     .where(
-      and(eq(LoanTable.userId, validUserId), eq(LoanTable.bookId, validBookId))
+      and(
+        eq(LoansTable.userId, validUserId),
+        eq(LoansTable.bookId, validBookId)
+      )
     );
   if (isLoanedSameBook.length > 0) {
     return {
@@ -209,17 +182,14 @@ export const loanABook = async (_: any, data: FormData) => {
   }
 
   await db.transaction(async (tx) => {
-    await tx.insert(LoanTable).values({
+    await tx.insert(LoansTable).values({
       bookId: validBookId,
       userId: validUserId,
     });
     await db
       .update(BooksTable)
       .set({
-        stocks: {
-          total: 3,
-          available: book[0].stocks.available - 1,
-        },
+        available: book[0].available - 1,
       })
       .where(eq(BooksTable.id, book[0].id));
   });
@@ -248,42 +218,30 @@ export const returnBookAction = async (data: FormData) => {
   await db.transaction(async (tx) => {
     // delete from loan table
     await tx
-      .delete(LoanTable)
-      .where(and(eq(LoanTable.bookId, bookId), eq(LoanTable.userId, userId)));
+      .delete(LoansTable)
+      .where(and(eq(LoansTable.bookId, bookId), eq(LoansTable.userId, userId)));
 
     // update books table stock
     await tx
       .update(BooksTable)
       .set({
-        stocks: {
-          total: book[0].stocks.total,
-          available: (book[0].stocks.available += 1),
-        },
+        stocks: book[0].stocks,
+        available: book[0].available + 1,
       })
       .where(eq(BooksTable.id, bookId));
 
-    // insert into comment table
-    const commentResult = await db
-      .insert(CommentTable)
-      .values({ content: comment })
-      .returning({
-        commentId: CommentTable.id,
-      });
-
-    // insert into book rating table
-    await tx.insert(BooksRatingTable).values({
+    await tx.insert(ReviewsTable).values({
       bookId,
-      value: rating,
+      description: comment,
+      rating: String(rating),
       userId,
-      commentId: commentResult[0].commentId,
     });
 
     // insert into loan histories
-    await tx.insert(LoanHistoriesTable).values({
+    await tx.insert(HistoriesTable).values({
       bookId,
       userId,
       loanAt,
-      returnAt: new Date(),
       charge,
     });
   });

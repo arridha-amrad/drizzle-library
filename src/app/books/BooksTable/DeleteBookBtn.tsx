@@ -1,6 +1,5 @@
 "use client";
-
-import { deleteBook as db } from "@/actions/bookActions";
+import { deleteBook as db } from "../action";
 import { useRef, useTransition } from "react";
 import { toast } from "react-toastify";
 
@@ -15,7 +14,7 @@ export default function DeleteBookButton({ id }: { id: string }) {
     startTransition(async () => {
       await db(id);
       ref.current?.close();
-      toast.dark("Deleted successfully", { position: "bottom-right" });
+      toast.success("Deleted successfully", { position: "bottom-right" });
     });
   };
   return (

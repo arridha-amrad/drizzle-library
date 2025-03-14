@@ -1,9 +1,10 @@
 import AddBookForm from "@/components/AddBookForm";
+import Modal from "./Modal";
 
 export default function Page() {
   return (
-    <dialog id="add-book-modal" className="modal">
-      <AddBookForm />
-    </dialog>
+    <Modal>
+      <AddBookForm isShowCancelButton={true} />
+    </Modal>
   );
 }
