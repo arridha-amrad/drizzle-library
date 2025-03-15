@@ -60,7 +60,7 @@ export default function OpenLoanDialogBtn({
 
   useEffect(() => {
     if (actionState.success) {
-      toast.success("Load successful");
+      toast.success("Loan successful");
       refDialog.current?.close();
     }
   }, [actionState.success]);

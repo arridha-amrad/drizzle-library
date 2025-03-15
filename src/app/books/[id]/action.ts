@@ -34,7 +34,7 @@ export const loanABook = async (_: any, data: FormData) => {
     .then((res) => res[0].count);
   if (userTotalLoan >= 4) {
     return {
-      actionError: "User has loaned 4 books.",
+      actionError: "Same user has loaned 4 books.",
     };
   }
 
@@ -45,7 +45,7 @@ export const loanABook = async (_: any, data: FormData) => {
     .where(eq(BooksTable.id, validBookId));
   if (book[0].available === 0) {
     return {
-      actionError: "un available stock",
+      actionError: "unavailable stock",
     };
   }
 
@@ -60,7 +60,7 @@ export const loanABook = async (_: any, data: FormData) => {
     );
   if (isLoanedSameBook.length > 0) {
     return {
-      actionError: "The user has been loaning this book",
+      actionError: "Same user is currently loaning this book",
     };
   }
 

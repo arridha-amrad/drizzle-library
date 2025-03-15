@@ -16,7 +16,7 @@ export const returnBookAction = async (_: any, data: FormData) => {
   const { loanAt, charge, userId, bookId, rating, comment } =
     Object.fromEntries(data.entries());
 
-  const schema = z
+  const validatedSchema = z
     .object({
       loanAt: z.string().transform((v) => new Date(v)),
       charge: z.string().transform((v) => parseInt(v)),
@@ -34,9 +34,9 @@ export const returnBookAction = async (_: any, data: FormData) => {
       bookId,
     });
 
-  if (!schema.success) {
+  if (!validatedSchema.success) {
     return {
-      validationErrors: schema.error.formErrors.fieldErrors,
+      validationErrors: validatedSchema.error.formErrors.fieldErrors,
       success: false,
       errors: null,
     };
@@ -49,7 +49,7 @@ export const returnBookAction = async (_: any, data: FormData) => {
     loanAt: la,
     rating: r,
     userId: u,
-  } = schema.data;
+  } = validatedSchema.data;
 
   const book = await db.select().from(BooksTable).where(eq(BooksTable.id, bi));
   await db
@@ -91,8 +91,9 @@ export const returnBookAction = async (_: any, data: FormData) => {
     };
   } else {
     revalidateTag(CACHE_KEY.loans);
+    revalidateTag(CACHE_KEY.loanBook);
     revalidateTag(CACHE_KEY.histories);
-    // revalidateTag(CACHE_KEY.charge);
+    revalidateTag(CACHE_KEY.charge);
     return {
       errors: null,
       validationErrors: null,
