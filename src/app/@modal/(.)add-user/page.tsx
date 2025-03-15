@@ -1,12 +1,17 @@
-import RegisterForm from "@/components/RegisterUserForm";
+"use client";
+
+import RegisterForm from "@/app/add-user/FormAddUser";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+const Modal = dynamic(() => import("./Modal"), { ssr: false });
 
 export default function Page() {
   return (
-    <dialog id="add-user-modal" className="modal modal-open">
+    <Modal>
       <Suspense>
-        <RegisterForm />
+        <RegisterForm isShowCancelButton />
       </Suspense>
-    </dialog>
+    </Modal>
   );
 }

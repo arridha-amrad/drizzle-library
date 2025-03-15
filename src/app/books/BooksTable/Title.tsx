@@ -1,9 +1,9 @@
 "use client";
 
-import { updateBookTitle } from "@/actions/bookActions";
 import Link from "next/link";
 import { KeyboardEvent, useActionState, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { updateBookTitle } from "../action";
 
 type Props = {
   id: string;

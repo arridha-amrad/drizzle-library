@@ -1,12 +1,12 @@
 "use client";
 
-import { loanABook } from "@/actions/bookActions";
-import { users } from "@/drizzle/schema";
+import { UsersTable } from "@/drizzle/schema";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import { loanABook } from "./action";
 
 type Props = {
-  users: (typeof users.$inferSelect)[];
+  users: (typeof UsersTable.$inferSelect)[];
   title: string;
   available: number;
   bookId: string;

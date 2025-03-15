@@ -5,4 +5,6 @@ export const CACHE_KEY = {
   loans: "loans",
   loanBook: "loans-of-a-book",
   reviews: "reviews",
+  histories: "histories",
+  charge: "charge",
 };

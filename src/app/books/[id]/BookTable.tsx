@@ -1,40 +1,14 @@
+import { fetchUsers } from "@/app/users/query";
 import Link from "next/link";
-import db from "@/drizzle/db";
-import { BooksTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
-import { unstable_cache } from "next/cache";
 import OpenLoanDialogBtn from "./LoanDialog";
-import { users } from "@/drizzle/schema";
+import { getBookDetail } from "./query";
 
 type Props = {
   id: string;
 };
 
-const getBookDetail = unstable_cache(
-  async (bookId: string) => {
-    const book = await db
-      .select()
-      .from(BooksTable)
-      .where(eq(BooksTable.id, bookId));
-    return book;
-  },
-  ["book-details"],
-  { tags: ["book-details"], revalidate: 60 }
-);
-
-const getUsers = unstable_cache(
-  async () => {
-    const existingUsers = await db.select().from(users);
-    return existingUsers;
-  },
-  ["users"],
-  {
-    tags: ["users"],
-  }
-);
-
 export default async function BookTable({ id }: Props) {
-  const [book, users] = await Promise.all([getBookDetail(id), getUsers()]);
+  const [book, users] = await Promise.all([getBookDetail(id), fetchUsers()]);
 
   return (
     <>
@@ -42,9 +16,9 @@ export default async function BookTable({ id }: Props) {
         <h1 className="text-xl font-bold tracking-tight">Book Detail</h1>
         <OpenLoanDialogBtn
           bookId={book[0].id}
-          users={users}
+          users={users.users}
           title={book[0].title}
-          available={book[0].stocks.available}
+          available={book[0].available}
         />
       </div>
       <div className="rounded-box mt-4 overflow-hidden border border-base-content/10 bg-base-100">
@@ -63,8 +37,8 @@ export default async function BookTable({ id }: Props) {
                 {book[0].title}
               </td>
               <td className="border-r border-base-content/10">
-                <div>total : {book[0].stocks.total}</div>
-                <div>available : {book[0].stocks.available}</div>
+                <div>stocks : {book[0].stocks}</div>
+                <div>available : {book[0].available}</div>
               </td>
               <td className="border-r border-base-content/10">
                 {book[0].author}

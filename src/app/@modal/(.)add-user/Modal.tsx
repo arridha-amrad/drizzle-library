@@ -12,7 +12,7 @@ export default function Modal({ children }: Props) {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
   useEffect(() => {
-    if (pathname !== "/add-book") {
+    if (pathname !== "/add-user") {
       setOpen(false);
     } else {
       setOpen(true);
@@ -22,7 +22,7 @@ export default function Modal({ children }: Props) {
   if (!open) return null;
 
   return createPortal(
-    <dialog className="modal modal-open">
+    <dialog id="modal_add_user" className="modal modal-open">
       <div className="modal-box w-[400px]">{children}</div>
     </dialog>,
     document.body

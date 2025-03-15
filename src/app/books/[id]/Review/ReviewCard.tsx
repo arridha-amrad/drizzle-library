@@ -1,4 +1,4 @@
-import { TReview } from ".";
+import { TReview } from "../query";
 
 type Props = {
   data: TReview;
@@ -8,9 +8,9 @@ export default function ReviewCard({ data }: Props) {
   return (
     <div className="card w-96 bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="text-neutral-500">{data.users.name}</h2>
+        <h2 className="text-neutral-500">{data.name}</h2>
         <p className="italic text-ellipsis text-opacity-70 whitespace-pre-line">
-          "{data.books_comment.content}"
+          "{data.comment}"
         </p>
         <div className="card-actions justify-end">
           <div className="rating rating-sm rating-half ">
@@ -19,7 +19,7 @@ export default function ReviewCard({ data }: Props) {
               <input
                 key={i + 1}
                 readOnly
-                checked={i + 1 === data.books_ratings.value * 2}
+                checked={i + 1 === parseFloat(data.rating) * 2}
                 disabled
                 type="radio"
                 className={`bg-orange-500 mask mask-star-2 ${

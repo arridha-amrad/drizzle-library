@@ -2,55 +2,10 @@ import BooksTable from "@/app/books/BooksTable/BooksTable";
 
 import SearchBookForm from "@/app/books/SearchForm";
 import PaginateButton from "@/components/PaginatedButton";
-import { BooksTable as BT } from "@/drizzle/schema";
 import { LIMIT_BOOKS } from "@/variables";
-import { and, arrayContains, asc, count, desc, ilike } from "drizzle-orm";
-import { unstable_cache } from "next/cache";
 import FilterBooks from "./FilterBooks";
 import Header from "./Header";
-import db from "@/drizzle/db";
-
-export const getBooks = unstable_cache(
-  async (
-    page?: number,
-    author?: string,
-    title?: string,
-    categories?: string[]
-  ) => {
-    const filters = and(
-      author && author !== "null" ? ilike(BT.author, `%${author}%`) : undefined,
-      title && title !== "null" ? ilike(BT.title, `%${title}%`) : undefined,
-      categories && categories.length > 0
-        ? arrayContains(BT.categories, categories)
-        : undefined
-    );
-    try {
-      const books = await db
-        .select()
-        .from(BT)
-        .where(filters)
-        .orderBy(desc(BT.title))
-        .limit(LIMIT_BOOKS)
-        .offset(page ? (page - 1) * LIMIT_BOOKS : 0);
-
-      const total = await db
-        .select({ count: count() })
-        .from(BT)
-        .where(filters)
-        .then((res) => res[0]?.count || 0);
-
-      return { books, total };
-    } catch (err: any) {
-      console.log(err);
-
-      throw new Error("Failed to fetch books : ", err.message);
-    }
-  },
-  ["books"],
-  {
-    tags: ["books"],
-  }
-);
+import { getBooks } from "./query";
 
 type Params = {
   title?: string;

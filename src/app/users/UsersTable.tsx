@@ -1,11 +1,11 @@
 import DeleteUserButton from "./DeleteUser";
 import EditUserButton from "./EditUser";
 import { LIMIT_USERS } from "@/variables";
-import { users } from "@/drizzle/schema";
+import { User } from "./query";
 
 type Props = {
   page: number;
-  users: (typeof users.$inferSelect)[];
+  users: User[];
 };
 
 export default async function UsersTable({ page, users }: Props) {
