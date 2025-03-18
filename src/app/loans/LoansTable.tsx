@@ -1,8 +1,8 @@
 import { LIMIT_BOOKS } from "@/variables";
 import { TLoanBooks } from "./query";
-import ReturnBookBtn from "@/app/loans/ReturnBook";
 import countCharge from "@/utils/countCharge";
 import Link from "next/link";
+import FinishLoan from "./FinishLoan";
 
 const className = {
   col: "border-r border-base-content/10",
@@ -64,7 +64,8 @@ function LoansTable({ books, page }: Props) {
                   {countCharge(book.loanDueAt).toString()}
                 </td>
                 <td className={`${className.col}`}>
-                  <ReturnBookBtn data={book} />
+                  {/* <Done data={book} /> */}
+                  <FinishLoan data={book} />
                 </td>
               </tr>
             ))

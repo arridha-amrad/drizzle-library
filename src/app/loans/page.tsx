@@ -3,11 +3,16 @@ import { LIMIT_BOOKS } from "@/variables";
 import Link from "next/link";
 import LoansTable from "./LoansTable";
 import { fetchLoanBooks } from "./query";
+import { Metadata } from "next";
 
 type Params = {
   searchParams: Promise<{
     page?: number;
   }>;
+};
+
+export const metadata: Metadata = {
+  title: "On Loan Books",
 };
 
 export default async function Page({ searchParams }: Params) {

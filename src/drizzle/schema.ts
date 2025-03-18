@@ -41,7 +41,7 @@ export const LoansTable = pgTable(
       .references(() => UsersTable.id),
     bookId: uuid("book_id")
       .notNull()
-      .references(() => BooksTable.id),
+      .references(() => BooksTable.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -56,10 +56,10 @@ export const HistoriesTable = pgTable("histories", {
   id: serial("id").primaryKey(),
   userId: serial("user_id")
     .notNull()
-    .references(() => UsersTable.id),
+    .references(() => UsersTable.id, { onDelete: "cascade" }),
   bookId: uuid("book_id")
     .notNull()
-    .references(() => BooksTable.id),
+    .references(() => BooksTable.id, { onDelete: "cascade" }),
   charge: bigint("charge", { mode: "number" }).notNull(),
   loanAt: timestamp("loan_at", { mode: "date", withTimezone: true }).notNull(),
   returnAt: timestamp("return_at", {
@@ -74,11 +74,11 @@ export const ReviewsTable = pgTable("reviews", {
   id: serial("id").primaryKey(),
   bookId: uuid("book_id")
     .notNull()
-    .references(() => BooksTable.id),
+    .references(() => BooksTable.id, { onDelete: "cascade" }),
   rating: numeric("ratings").notNull(),
   userId: serial("user_id")
     .notNull()
-    .references(() => UsersTable.id),
+    .references(() => UsersTable.id, { onDelete: "cascade" }),
   description: text().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
     .notNull()

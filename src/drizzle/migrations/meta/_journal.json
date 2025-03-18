@@ -8,6 +8,13 @@
       "when": 1741967129007,
       "tag": "0000_nice_skin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742122188856,
+      "tag": "0001_stale_nemesis",
+      "breakpoints": true
     }
   ]
 }

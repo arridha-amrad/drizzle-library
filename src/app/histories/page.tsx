@@ -1,9 +1,13 @@
-import { LIMIT_BOOKS } from "@/variables";
-import Link from "next/link";
-import { fetchHistories, sumCharge } from "./query";
 import PaginateButton from "@/components/PaginatedButton";
-import Table from "./Table";
+import { LIMIT_BOOKS } from "@/variables";
+import { Metadata } from "next";
 import Header from "./Header";
+import { fetchHistories, sumCharge } from "./query";
+import Table from "./Table";
+
+export const metadata: Metadata = {
+  title: "Loan Histories",
+};
 
 type Props = {
   searchParams: Promise<{
@@ -14,6 +18,7 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
   const { page } = await searchParams;
   const intPage = isNaN(Number(page)) ? 1 : Number(page);
+
   const [{ histories, total }, balance] = await Promise.all([
     fetchHistories(intPage),
     sumCharge(),
