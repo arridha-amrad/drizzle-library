@@ -46,7 +46,7 @@ export const LoansTable = pgTable(
       .defaultNow()
       .notNull(),
     dueAt: timestamp("due_at", { mode: "date", withTimezone: true })
-      .default(sql`NOW() + INTERVAL '2 days'`)
+      .default(sql`NOW() + INTERVAL '10 days'`)
       .notNull(),
   },
   (table) => [primaryKey({ columns: [table.bookId, table.userId] })]
