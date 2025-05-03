@@ -1,4 +1,4 @@
-import RegisterUserForm from "@/app/add-user/FormAddUser";
+import RegisterUserForm from "@/components/Forms/FormCreateUser";
 
 export default function Page() {
   return (

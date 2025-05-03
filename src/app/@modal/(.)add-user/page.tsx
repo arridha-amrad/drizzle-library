@@ -1,6 +1,6 @@
 "use client";
 
-import RegisterForm from "@/app/add-user/FormAddUser";
+import RegisterForm from "@/components/Forms/FormCreateUser";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 

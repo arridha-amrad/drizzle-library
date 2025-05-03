@@ -32,7 +32,12 @@ export default function RootLayout({
             {children}
             {modal}
           </div>
-          <ToastContainer theme="dark" position="top-right" autoClose={3000} />
+          <ToastContainer
+            theme="dark"
+            position="top-right"
+            pauseOnFocusLoss={false}
+            autoClose={3000}
+          />
         </Drawer>
       </body>
     </html>

@@ -1,10 +1,10 @@
 "use client";
 
+import { removeUser } from "@/actions/users/removeUser";
 import { useRef, useTransition } from "react";
 import { toast } from "react-toastify";
-import { removeUser } from "./actions";
 
-export default function DeleteUserButton({ id }: { id: number }) {
+export default function ButtonDeleteUser({ id }: { id: number }) {
   const refDialog = useRef<HTMLDialogElement | null>(null);
   const [isPending, startTransition] = useTransition();
   const remove = () => {

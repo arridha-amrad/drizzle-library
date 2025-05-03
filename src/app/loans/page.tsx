@@ -1,5 +1,5 @@
 import PaginatedButton from "@/components/PaginatedButton";
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
 import LoansTable from "./LoansTable";
 import { fetchLoanBooks } from "./query";

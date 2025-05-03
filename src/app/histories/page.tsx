@@ -1,5 +1,5 @@
 import PaginateButton from "@/components/PaginatedButton";
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import { Metadata } from "next";
 import Header from "./Header";
 import { fetchHistories, sumCharge } from "./query";

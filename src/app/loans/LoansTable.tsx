@@ -1,6 +1,6 @@
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import { TLoanBooks } from "./query";
-import countCharge from "@/utils/countCharge";
+import countCharge from "@/utils";
 import Link from "next/link";
 import FinishLoan from "./FinishLoan";
 

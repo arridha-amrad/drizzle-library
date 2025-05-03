@@ -1,5 +1,5 @@
 import db from "@/drizzle/db";
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import { and, count, ilike, arrayContains, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { BooksTable } from "@/drizzle/schema";

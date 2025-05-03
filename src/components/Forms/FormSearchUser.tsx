@@ -2,9 +2,9 @@
 
 import Form from "next/form";
 
-export default function SearchForm() {
+export default function FormSearchUser() {
   return (
-    <Form className="w-full max-w-sm" action="">
+    <Form className="w-full max-w-sm" action="/users/search">
       <label className="input w-full input-neutral flex items-center gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ export default function SearchForm() {
               e.currentTarget.form?.requestSubmit();
             }
           }}
-          name="name"
+          name="query"
           type="text"
           className=""
           placeholder="Search users"

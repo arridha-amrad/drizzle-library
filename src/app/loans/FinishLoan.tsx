@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { finishLoan } from "./actions";
 import { toast } from "react-toastify";
 import { TLoanBooks } from "./query";
-import countCharge from "@/utils/countCharge";
+import countCharge from "@/utils";
 import Rating from "./Rating";
 
 const initialState = {
@@ -98,6 +98,7 @@ export default function FinishLoan({
             </div>
             <div className="mt-4 flex justify-end gap-3">
               <button
+                type="button"
                 className="btn btn-neutral"
                 onClick={() => refModal.current?.close()}
               >

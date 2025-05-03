@@ -2,7 +2,7 @@ import BooksTable from "@/app/books/BooksTable/BooksTable";
 
 import SearchBookForm from "@/app/books/SearchForm";
 import PaginateButton from "@/components/PaginatedButton";
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import FilterBooks from "./FilterBooks";
 import Header from "./Header";
 import { getBooks } from "./query";

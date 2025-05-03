@@ -1,5 +1,6 @@
 export const CACHE_KEY = {
   users: "users",
+  userByName: "users-by-name",
   books: "books",
   bookDetail: "books-details",
   loans: "loans",

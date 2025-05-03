@@ -1,4 +1,4 @@
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
 import { History } from "./query";
 

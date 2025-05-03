@@ -1,5 +1,5 @@
 import { BooksTable } from "@/drizzle/schema";
-import { LIMIT_BOOKS } from "@/variables";
+import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
 import BookTableTitle from "./Title";
 import DeleteBookButton from "./DeleteBookBtn";
