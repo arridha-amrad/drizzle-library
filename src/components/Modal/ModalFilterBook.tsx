@@ -1,9 +1,9 @@
 "use client";
 
-import Form from "next/form";
+import FormFilterBook from "@/components/Forms/FormFilterBook";
 import { useRef } from "react";
 
-export default function FilterBooks() {
+export default function ModalFilterBook() {
   const refDialog = useRef<HTMLDialogElement | null>(null);
   return (
     <>
@@ -28,35 +28,7 @@ export default function FilterBooks() {
       </button>
       <dialog ref={refDialog} className="modal">
         <div className="modal-box">
-          <Form className="flex flex-col gap-3 w-full" action="">
-            <input
-              name="title"
-              type="text"
-              placeholder="Title"
-              className="input input-neutral w-full"
-            />
-            <input
-              name="author"
-              type="text"
-              placeholder="Author"
-              className="input input-neutral w-full"
-            />
-            <input
-              name="categories"
-              type="text"
-              placeholder="Categories"
-              className="input input-neutral w-full"
-            />
-            <div className="w-max mr-0 space-x-3 self-end">
-              <button
-                onClick={() => refDialog.current?.close()}
-                className="btn btn-soft"
-              >
-                Close
-              </button>
-              <button className="btn btn-soft btn-primary">Filter Books</button>
-            </div>
-          </Form>
+          <FormFilterBook />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>

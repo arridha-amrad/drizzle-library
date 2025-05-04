@@ -1,11 +1,11 @@
-import BooksTable from "@/app/books/BooksTable/BooksTable";
+import BooksTable from "@/components/Tables/TableBooks";
 import SearchBookForm from "@/components/Forms/FormSearchBook";
 import PaginateButton from "@/components/PaginatedButton";
 import { LIMIT_BOOKS } from "@/constants";
 import { fetchBooks } from "@/queries/fetchBooks";
 import { SearchParams } from "@/types";
-import FilterBooks from "./FilterBooks";
 import Header from "./Header";
+import ModalFilterBook from "@/components/Modal/ModalFilterBook";
 
 type Props = {
   searchParams: SearchParams;
@@ -14,7 +14,6 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
   const page = (await searchParams).page;
   const intPage = isNaN(Number(page)) ? 1 : Number(page);
-  // const bc = categories ? categories.split(",").map((v) => v.trim()) : [];
   const { books, total } = await fetchBooks(intPage);
 
   return (
@@ -22,7 +21,7 @@ export default async function Page({ searchParams }: Props) {
       <div className="pb-4 flex justify-between">
         <Header />
         <div className="flex items-center gap-3 w-full max-w-sm">
-          <FilterBooks />
+          <ModalFilterBook />
           <SearchBookForm />
         </div>
       </div>

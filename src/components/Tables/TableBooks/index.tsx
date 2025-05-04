@@ -1,8 +1,8 @@
 import { BooksTable } from "@/lib/drizzle/schema";
 import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
-import BookTableTitle from "./Title";
-import DeleteBookButton from "./DeleteBookBtn";
+import BookTableTitle from "./ColumnTitle";
+import ButtonDeleteBook from "@/components/Buttons/ButtonDeleteBook";
 
 type Book = typeof BooksTable.$inferSelect;
 
@@ -41,7 +41,11 @@ export default async function Table({
                   <td className="border-r border-base-content/10 text-center">
                     {i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}
                   </td>
-                  <BookTableTitle id={book.id} title={book.title} />
+                  <BookTableTitle
+                    id={book.id}
+                    slug={book.slug}
+                    title={book.title}
+                  />
                   <td className="text-center border-r border-base-content/10">
                     {book.stocks}
                   </td>
@@ -71,7 +75,7 @@ export default async function Table({
                   </td>
                   <td>
                     <div className="w-fit mx-auto">
-                      <DeleteBookButton id={book.id} />
+                      <ButtonDeleteBook id={book.id} />
                     </div>
                   </td>
                 </tr>

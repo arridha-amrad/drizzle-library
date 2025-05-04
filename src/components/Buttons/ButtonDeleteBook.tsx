@@ -1,20 +1,20 @@
 "use client";
-import { deleteBook as db } from "../action";
+import { deleteBook } from "@/actions/books/deleteBook";
 import { useRef, useTransition } from "react";
 import { toast } from "react-toastify";
 
-export default function DeleteBookButton({ id }: { id: string }) {
+export default function ButtonDeleteBook({ id }: { id: string }) {
   const ref = useRef<HTMLDialogElement | null>(null);
   const openModalDelete = () => {
     ref.current?.showModal();
   };
 
   const [isLoading, startTransition] = useTransition();
-  const deleteBook = () => {
+  const removeBook = () => {
     startTransition(async () => {
-      await db(id);
+      await deleteBook({ bookId: id });
       ref.current?.close();
-      toast.success("Deleted successfully", { position: "bottom-right" });
+      toast.success("Deleted successfully");
     });
   };
   return (
@@ -37,11 +37,14 @@ export default function DeleteBookButton({ id }: { id: string }) {
           <div className="modal-action">
             <button
               onClick={() => ref.current?.close()}
-              className="btn btn-neutral"
+              className="btn btn-neutral w-20"
             >
               Close
             </button>
-            <button onClick={deleteBook} className="btn btn-error btn-soft">
+            <button
+              onClick={removeBook}
+              className="btn btn-error btn-soft w-20"
+            >
               {isLoading ? (
                 <span className="loading loading-spinner"></span>
               ) : (

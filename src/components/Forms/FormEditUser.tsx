@@ -61,6 +61,9 @@ export default function FormEditUser({
     },
     onSuccess({ data }) {
       if (data) {
+        if (cancelCallback) {
+          cancelCallback();
+        }
         toast.success("Edit is successful");
         const name = decodeURIComponent(data.name);
         router.push(`/users/${name}`);
@@ -87,7 +90,7 @@ export default function FormEditUser({
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Email</legend>
         <input
-          value={user.email}
+          value={state.email}
           onChange={handleChange}
           type="text"
           className="input input-neutral w-full"

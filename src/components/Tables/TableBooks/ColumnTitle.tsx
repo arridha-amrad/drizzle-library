@@ -1,13 +1,15 @@
 "use client";
 
+import { updateBookTitle } from "@/actions/books/updateBookTitle";
+import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
-import { KeyboardEvent, useActionState, useEffect, useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { toast } from "react-toastify";
-import { updateBookTitle } from "../action";
 
 type Props = {
-  id: string;
+  slug: string;
   title: string;
+  id: string;
 };
 
 const initialState = {
@@ -16,55 +18,40 @@ const initialState = {
   success: false,
 };
 
-function BookTableTitle({ id, title }: Props) {
+function BookTableTitle({ slug, title, id }: Props) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [state, setState] = useState(title);
 
-  const [actionState, formAction, pending] = useActionState(
-    (initialState: any, formData: FormData) =>
-      updateBookTitle(initialState, formData, id),
-    initialState
-  );
+  const { execute, isPending } = useAction(updateBookTitle.bind(null, id), {
+    onSuccess() {
+      toast.success("Title updated");
+      setIsUpdate(false);
+    },
+    onError({ error: { serverError, validationErrors } }) {
+      if (serverError) {
+        toast.error(serverError);
+      }
+      if (validationErrors) {
+        const vErr = validationErrors.title?._errors;
+        if (vErr) {
+          toast.error(vErr[0]);
+        }
+      }
+    },
+  });
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      actionState.success = false;
-      actionState.validationErrors = undefined;
-      actionState.actionError = undefined;
       e.preventDefault();
       e.currentTarget.form?.requestSubmit();
     }
   };
 
-  const validationError = actionState?.validationErrors?.title;
-  const isUpdateSuccessful = actionState.success;
-  const actionError = actionState.actionError;
-
-  useEffect(() => {
-    if (actionError) {
-      toast.error(actionError);
-      setIsUpdate(false);
-    }
-  }, [actionError]);
-
-  useEffect(() => {
-    if (isUpdateSuccessful) {
-      toast.success("Title updated");
-      setIsUpdate(false);
-    }
-  }, [isUpdateSuccessful]);
-
-  useEffect(() => {
-    if (validationError) {
-      toast.error(validationError[0]);
-    }
-  }, [validationError]);
-
   return (
     <td className="max-w-lg group relative w-full border-r border-base-content/10">
       {isUpdate ? (
-        <fieldset disabled={pending}>
-          <form action={formAction}>
+        <fieldset disabled={isPending}>
+          <form action={execute}>
             <input
               autoFocus={true}
               name="title"
@@ -78,7 +65,7 @@ function BookTableTitle({ id, title }: Props) {
           </form>
         </fieldset>
       ) : (
-        <Link className="line-clamp-2" href={`/books/${id}`}>
+        <Link className="line-clamp-2" href={`/books/${slug}`}>
           {title}
         </Link>
       )}

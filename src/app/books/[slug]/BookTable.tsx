@@ -1,25 +1,24 @@
-import { fetchUsers } from "@/app/users/query";
+// import { fetchUsers } from "@/app/users/query";
 import Link from "next/link";
 import OpenLoanDialogBtn from "./LoanDialog";
-import { getBookDetail } from "./query";
 
 type Props = {
   id: string;
 };
 
 export default async function BookTable({ id }: Props) {
-  const [book, users] = await Promise.all([getBookDetail(id), fetchUsers()]);
+  // const [book, users] = await Promise.all([getBookDetail(id), fetchUsers()]);
 
   return (
     <>
       <div className="h-[50px] flex items-center w-full justify-between ">
         <h1 className="text-xl font-bold tracking-tight">Book Detail</h1>
-        <OpenLoanDialogBtn
+        {/* <OpenLoanDialogBtn
           bookId={book[0].id}
           users={users.users}
           title={book[0].title}
           available={book[0].available}
-        />
+        /> */}
       </div>
       <div className="rounded-box mt-4 overflow-hidden border border-base-content/10 bg-base-100">
         <table className="table">

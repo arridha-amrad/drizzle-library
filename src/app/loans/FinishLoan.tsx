@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { finishLoan } from "./actions";
 import { toast } from "react-toastify";
 import { TLoanBooks } from "./query";
-import countCharge from "@/utils";
+import { countCharge } from "@/utils";
 import Rating from "./Rating";
 
 const initialState = {
