@@ -3,7 +3,7 @@ export const CACHE_KEY = {
   userByName: "users-by-name",
   books: "books",
   bookDetail: "books-details",
-  loans: "loans",
+  onLoanBooks: "on-loans-books",
   loanBook: "loans-of-a-book",
   reviews: "reviews",
   histories: "histories",

@@ -1,8 +1,8 @@
 import { LIMIT_BOOKS } from "@/constants";
-import { TLoanBooks } from "./query";
-import countCharge from "@/utils";
+import { countCharge } from "@/utils";
 import Link from "next/link";
 import FinishLoan from "./FinishLoan";
+import { TLoanBooks } from "@/queries/fetchOnLoanBooks";
 
 const className = {
   col: "border-r border-base-content/10",

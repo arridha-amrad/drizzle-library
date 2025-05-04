@@ -1,11 +1,11 @@
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/lib/drizzle/db";
-import { LoansTable, UsersTable, BooksTable } from "@/lib/drizzle/schema";
 import { LIMIT_BOOKS } from "@/constants";
+import db from "@/lib/drizzle/db";
+import { BooksTable, LoansTable, UsersTable } from "@/lib/drizzle/schema";
 import { count, eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const fetchLoanBooks = unstable_cache(
+export const fetchOnLoanBooks = unstable_cache(
   async (page: number) => {
     const books = await db
       .select({
@@ -32,11 +32,11 @@ export const fetchLoanBooks = unstable_cache(
       total,
     };
   },
-  [CACHE_KEY.loans],
+  [CACHE_KEY.onLoanBooks],
   {
-    tags: [CACHE_KEY.loans],
+    tags: [CACHE_KEY.onLoanBooks],
     revalidate: 60 * 10,
   }
 );
 
-export type TLoanBooks = Awaited<ReturnType<typeof fetchLoanBooks>>;
+export type TLoanBooks = Awaited<ReturnType<typeof fetchOnLoanBooks>>;

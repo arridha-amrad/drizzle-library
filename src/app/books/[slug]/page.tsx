@@ -6,7 +6,6 @@ import { fetchBookBySlug } from "@/queries/fetchBookBySlug";
 import { SearchParams } from "@/types";
 import { notFound } from "next/navigation";
 import BookReviews from "./Reviews";
-import InputBorrowBookUser from "@/components/Input/InputBorrowBookUser";
 
 type Params = {
   params: Promise<{
@@ -30,9 +29,7 @@ export default async function Page({ params, searchParams }: Params) {
     <section className="xl:px-8 xl:py-2 p-4  min-h-screen flex flex-col">
       <div className="h-20 flex gap-4 items-center">
         <h1 className="text-3xl font-bold tracking-tight">Book Detail</h1>
-        <ModalBorrowBook available={available} bookId={id} title={title}>
-          <InputBorrowBookUser />
-        </ModalBorrowBook>
+        <ModalBorrowBook available={available} bookId={id} title={title} />
       </div>
       <TableBookDetail book={storedBook[0]} />
       <TabBookDetail />

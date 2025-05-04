@@ -1,4 +1,30 @@
-export default function FormBorrowBook() {
+import { ReactNode } from "react";
+import InputBorrowBookUser from "../Input/InputBorrowBookUser";
+import { loanBook } from "@/actions/books/loanBook";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "react-toastify";
+
+type Props = {
+  children: ReactNode;
+  bookId: string;
+  bookTitle: string;
+};
+
+export default function FormBorrowBook({ bookId, bookTitle, children }: Props) {
+  const { execute, isPending } = useAction(loanBook, {
+    onSuccess() {
+      toast.success("Loan successful");
+    },
+    onError({ error: { serverError, validationErrors } }) {
+      if (serverError) {
+        toast.error(serverError);
+      }
+      if (validationErrors) {
+        toast.error("Validation error");
+      }
+    },
+  });
+
   return (
     <form action={execute} className="space-y-3 mt-4 w-full">
       <input type="text" name="bookId" defaultValue={bookId} hidden />
@@ -7,20 +33,14 @@ export default function FormBorrowBook() {
         <input
           readOnly
           name="title"
-          defaultValue={title}
+          defaultValue={bookTitle}
           type="text"
           className="input input-neutral w-full"
         />
       </fieldset>
-      {children}
+      <InputBorrowBookUser />
       <div className="modal-action">
-        <button
-          type="button"
-          onClick={() => refDialog.current?.close()}
-          className="btn btn-neutral w-20"
-        >
-          Close
-        </button>
+        {children}
         <button className="btn btn-primary w-20" type="submit">
           {isPending ? (
             <span className="loading loading-spinner loading-sm"></span>
