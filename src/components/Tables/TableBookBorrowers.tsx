@@ -1,11 +1,11 @@
-import { getBookLoanData } from "./query";
+import { fetchBookBorrowers } from "@/queries/fetchBookBorrowers";
 
 type Props = {
   bookId: string;
 };
 
-export default async function LoanListTable({ bookId }: Props) {
-  const loanList = await getBookLoanData(bookId);
+export default async function TableBookBorrowers({ bookId }: Props) {
+  const loanList = await fetchBookBorrowers(bookId);
 
   return (
     <div className="rounded-box mt-4 overflow-hidden border border-base-content/10 bg-base-100">

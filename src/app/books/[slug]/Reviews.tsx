@@ -1,12 +1,12 @@
-import { fetchReviews } from "../query";
-import ReviewCard from "./ReviewCard";
+import CardBookReview from "@/components/Cards/CardBookReview";
+import { fetchBookReviews } from "@/queries/fetchBookReviews";
 
 type Props = {
   bookId: string;
 };
 
 export default async function BookReviews({ bookId }: Props) {
-  const reviews = await fetchReviews(bookId);
+  const reviews = await fetchBookReviews(bookId);
   return (
     <section className="flex items-center flex-wrap gap-3">
       {reviews.length === 0 ? (
@@ -14,7 +14,7 @@ export default async function BookReviews({ bookId }: Props) {
           <h1 className="text-base">This book has no review</h1>
         </div>
       ) : (
-        reviews.map((review, i) => <ReviewCard data={review} key={i} />)
+        reviews.map((review, i) => <CardBookReview data={review} key={i} />)
       )}
     </section>
   );

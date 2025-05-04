@@ -1,10 +1,10 @@
-import { TReview } from "../query";
+import { TReview } from "@/queries/fetchBookReviews";
 
 type Props = {
   data: TReview;
 };
 
-export default function ReviewCard({ data }: Props) {
+export default function CardBookReview({ data }: Props) {
   return (
     <div className="card w-96 bg-base-100 shadow-xl">
       <div className="card-body">

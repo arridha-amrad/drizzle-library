@@ -8,15 +8,18 @@ import { actionClient, SafeActionError } from "@/lib/safeAction";
 import { count, eq, and } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import { zfd } from "zod-form-data";
 
 export const loanBook = actionClient
   .schema(
-    z.object({
-      userId: z.number(),
-      bookId: z.string().uuid(),
+    zfd.formData({
+      userId: zfd.text(z.string().transform(async (v) => parseInt(v))),
+      bookId: zfd.text(z.string().uuid()),
     })
   )
   .action(async ({ parsedInput: { bookId, userId } }) => {
+    console.log({ bookId, userId });
+
     try {
       const totalLoan = await db
         .select({

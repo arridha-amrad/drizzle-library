@@ -6,7 +6,7 @@ import { UsersTable, ReviewsTable, BooksTable } from "@/lib/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const fetchReviews = unstable_cache(
+export const fetchBookReviews = unstable_cache(
   async (bookId: string) => {
     return db
       .select({
@@ -22,4 +22,4 @@ export const fetchReviews = unstable_cache(
   [CACHE_KEY.reviews],
   { tags: [CACHE_KEY.reviews], revalidate: 60 * 10 }
 );
-export type TReview = Awaited<ReturnType<typeof fetchReviews>>[number];
+export type TReview = Awaited<ReturnType<typeof fetchBookReviews>>[number];

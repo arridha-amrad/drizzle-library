@@ -6,7 +6,7 @@ import { LoansTable, UsersTable, BooksTable } from "@/lib/drizzle/schema";
 import { eq, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const getBookLoanData = unstable_cache(
+export const fetchBookBorrowers = unstable_cache(
   async (bookId: string) => {
     const data = await db
       .select({

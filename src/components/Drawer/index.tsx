@@ -23,8 +23,8 @@ export default function Drawer({ children }: Props) {
           className="drawer-overlay"
         ></label>
         <ul className="menu w-72 min-h-full bg-base-200 text-base-content">
-          <li className="w-full ">
-            <div className="flex h-[6rem]">
+          <li className="w-full">
+            <div className="flex h-20">
               <Link href="/" className="font-bold text-xl w-full">
                 Drizzle Library
               </Link>
