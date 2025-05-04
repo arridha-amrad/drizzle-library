@@ -59,9 +59,12 @@ export default function FormEditUser({
     onSettled() {
       setPendingUi(false);
     },
-    onSuccess() {
-      toast.success("Edit is successful");
-      router.push(`/users/${state.name}`);
+    onSuccess({ data }) {
+      if (data) {
+        toast.success("Edit is successful");
+        const name = decodeURIComponent(data.name);
+        router.push(`/users/${name}`);
+      }
     },
   });
 

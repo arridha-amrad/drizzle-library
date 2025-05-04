@@ -1,8 +1,8 @@
-import db from "@/drizzle/db";
+import db from "@/lib/drizzle/db";
 import { LIMIT_BOOKS } from "@/constants";
 import { and, count, ilike, arrayContains, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
-import { BooksTable } from "@/drizzle/schema";
+import { BooksTable } from "@/lib/drizzle/schema";
 import { CACHE_KEY } from "@/cacheKeys";
 
 export const getBooks = unstable_cache(

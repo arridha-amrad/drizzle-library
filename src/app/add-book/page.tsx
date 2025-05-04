@@ -1,4 +1,4 @@
-import AddBookForm from "@/app/add-book/FormAddBook";
+import AddBookForm from "@/components/Forms/FormCreateBook";
 
 export default function Page() {
   return (

@@ -1,8 +1,8 @@
 "use server";
 
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
-import { LoansTable, BooksTable } from "@/drizzle/schema";
+import db from "@/lib/drizzle/db";
+import { LoansTable, BooksTable } from "@/lib/drizzle/schema";
 import { eq, and, count } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";

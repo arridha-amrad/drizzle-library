@@ -1,17 +1,25 @@
 "use client";
 
-import { removeUser } from "@/actions/users/removeUser";
+import { deleteUser } from "@/actions/users/deleteUser";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef, useTransition } from "react";
 import { toast } from "react-toastify";
 
 export default function ButtonDeleteUser({ id }: { id: number }) {
   const refDialog = useRef<HTMLDialogElement | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
+  const pathname = usePathname();
+
   const remove = () => {
     startTransition(async () => {
-      await removeUser(id);
+      await deleteUser(id);
       refDialog.current?.close();
-      toast.success("Deleted", { position: "bottom-right" });
+      toast.success("Deleted");
+      if (pathname !== "/users") {
+        router.push("/users");
+      }
     });
   };
   return (

@@ -12,7 +12,8 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
   const name = (await searchParams).query;
 
-  const users = typeof name === "string" ? await searchUser(name) : [];
+  const users =
+    typeof name === "string" ? await searchUser(decodeURIComponent(name)) : [];
 
   return (
     <main className="xl:p-8 p-4 min-h-screen flex flex-col">

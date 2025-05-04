@@ -3,7 +3,7 @@
 import Form from "next/form";
 import { useRef } from "react";
 
-function SearchBookForm() {
+function FormSearchBook() {
   const formRef = useRef<HTMLFormElement | null>(null);
   return (
     <Form ref={formRef} className="w-full max-w-sm" action="">
@@ -35,4 +35,4 @@ function SearchBookForm() {
   );
 }
 
-export default SearchBookForm;
+export default FormSearchBook;

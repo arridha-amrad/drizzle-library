@@ -1,11 +1,11 @@
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
+import db from "@/lib/drizzle/db";
 import {
   LoansTable,
   UsersTable,
   BooksTable,
   ReviewsTable,
-} from "@/drizzle/schema";
+} from "@/lib/drizzle/schema";
 import { eq, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 

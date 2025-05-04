@@ -1,6 +1,6 @@
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
-import { LoansTable, UsersTable, BooksTable } from "@/drizzle/schema";
+import db from "@/lib/drizzle/db";
+import { LoansTable, UsersTable, BooksTable } from "@/lib/drizzle/schema";
 import { LIMIT_BOOKS } from "@/constants";
 import { count, eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";

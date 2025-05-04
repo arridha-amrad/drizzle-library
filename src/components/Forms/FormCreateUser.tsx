@@ -1,11 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { registerUser } from "../../app/add-user/action";
-import { useAction } from "next-safe-action/hooks";
 import { createUser } from "@/actions/users/createUser";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 type Props = {
   isShowCancelButton?: boolean;
@@ -21,18 +20,27 @@ export default function FromCreateUser({ isShowCancelButton }: Props) {
   });
 
   const { execute, isPending } = useAction(createUser, {
-    onSuccess() {
+    onSuccess({ data }) {
+      if (data) {
+        router.push(`/users/${data.name}`);
+      }
       toast.success("Register is successful");
-      router.push(`/users/${name}`);
     },
     onError: ({ error }) => {
-      const emailError = error.validationErrors?.email;
-      const nameError = error.validationErrors?.name;
-      setErrors({
-        ...errors,
-        email: emailError?._errors ? emailError._errors[0] : "",
-        name: nameError?._errors ? nameError._errors[0] : "",
-      });
+      const serverError = error.serverError;
+      if (serverError) {
+        toast.error(serverError);
+      }
+      const vErr = error.validationErrors;
+      if (vErr) {
+        const emailError = vErr.email;
+        const nameError = vErr.name;
+        setErrors({
+          ...errors,
+          email: emailError?._errors ? emailError._errors[0] : "",
+          name: nameError?._errors ? nameError._errors[0] : "",
+        });
+      }
     },
   });
 

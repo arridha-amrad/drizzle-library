@@ -1,7 +1,7 @@
 import { CACHE_KEY } from "@/cacheKeys";
 import { LIMIT_USERS } from "@/constants";
-import db from "@/drizzle/db";
-import { UsersTable } from "@/drizzle/schema";
+import db from "@/lib/drizzle/db";
+import { UsersTable } from "@/lib/drizzle/schema";
 import { count, desc, eq, ilike } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 

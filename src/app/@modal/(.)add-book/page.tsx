@@ -1,6 +1,6 @@
 "use client";
 
-import FormAddBook from "@/app/add-book/FormAddBook";
+import FormAddBook from "@/components/Forms/FormCreateBook";
 import dynamic from "next/dynamic";
 
 const Modal = dynamic(() => import("./Modal"), { ssr: false });

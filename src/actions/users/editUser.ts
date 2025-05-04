@@ -1,9 +1,9 @@
 "use server";
 
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
-import { UsersTable } from "@/drizzle/schema";
-import { actionClient } from "@/lib/safeAction";
+import db from "@/lib/drizzle/db";
+import { UsersTable } from "@/lib/drizzle/schema";
+import { actionClient, SafeActionError } from "@/lib/safeAction";
 import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -23,7 +23,7 @@ export const editUser = actionClient
       bindArgsParsedInputs: [userId],
     }) => {
       try {
-        await db
+        const result = await db
           .update(UsersTable)
           .set({
             email,
@@ -34,6 +34,10 @@ export const editUser = actionClient
 
         revalidateTag(CACHE_KEY.users);
         revalidateTag(CACHE_KEY.userByName);
+        if (result.length === 0) {
+          throw new SafeActionError("Failed to edit user");
+        }
+        return result[0];
       } catch (err) {
         throw err;
       }

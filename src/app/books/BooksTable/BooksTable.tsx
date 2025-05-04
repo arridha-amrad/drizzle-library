@@ -1,4 +1,4 @@
-import { BooksTable } from "@/drizzle/schema";
+import { BooksTable } from "@/lib/drizzle/schema";
 import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
 import BookTableTitle from "./Title";

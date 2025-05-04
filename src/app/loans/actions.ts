@@ -1,13 +1,13 @@
 "use server";
 
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
+import db from "@/lib/drizzle/db";
 import {
   BooksTable,
   HistoriesTable,
   LoansTable,
   ReviewsTable,
-} from "@/drizzle/schema";
+} from "@/lib/drizzle/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";

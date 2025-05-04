@@ -28,6 +28,7 @@ export const BooksTable = pgTable("books", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: varchar("title", { length: 255 }).notNull(),
   author: varchar("author").notNull(),
+  slug: text("slug").notNull().default(""),
   categories: text("categories").array().notNull().$type<string[]>(),
   stocks: integer("stocks").notNull(),
   available: integer("available").notNull(),

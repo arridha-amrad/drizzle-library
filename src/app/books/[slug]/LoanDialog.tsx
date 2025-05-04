@@ -1,6 +1,6 @@
 "use client";
 
-import { UsersTable } from "@/drizzle/schema";
+import { UsersTable } from "@/lib/drizzle/schema";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { loanABook } from "./action";

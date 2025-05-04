@@ -1,6 +1,6 @@
 import { LIMIT_USERS } from "@/constants";
-import db from "@/drizzle/db";
-import { UsersTable } from "@/drizzle/schema";
+import db from "@/lib/drizzle/db";
+import { UsersTable } from "@/lib/drizzle/schema";
 import { desc, ilike } from "drizzle-orm";
 
 export const searchUser = async (name: string) => {

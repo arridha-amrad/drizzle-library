@@ -1,9 +1,10 @@
 "use server";
 
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/drizzle/db";
-import { UsersTable } from "@/drizzle/schema";
-import { actionClient } from "@/lib/safeAction";
+import db from "@/lib/drizzle/db";
+import { UsersTable } from "@/lib/drizzle/schema";
+import { actionClient, SafeActionError } from "@/lib/safeAction";
+import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -16,10 +17,27 @@ export const createUser = actionClient
     })
   )
   .action(async ({ parsedInput: { email, name } }) => {
-    await db.insert(UsersTable).values({
-      name,
-      email,
-    });
+    const isEmailRegistered = await db
+      .select()
+      .from(UsersTable)
+      .where(eq(UsersTable.email, email));
 
+    if (isEmailRegistered.length > 0) {
+      throw new SafeActionError("Email has been registered");
+    }
+
+    const result = await db
+      .insert(UsersTable)
+      .values({
+        name,
+        email,
+      })
+      .returning();
+
+    if (result.length === 0) {
+      throw new SafeActionError("Failed to create user");
+    }
     revalidateTag(CACHE_KEY.users);
+
+    return result[0];
   });

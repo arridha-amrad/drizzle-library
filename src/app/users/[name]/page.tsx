@@ -10,7 +10,10 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const name = (await params).name;
-  const { users } = await fetchUserByName(name);
+  const decodedName = decodeURIComponent(name);
+
+  const { users } = await fetchUserByName(decodedName);
+
   return (
     <main className="xl:p-8 p-4 min-h-screen flex flex-col">
       <div className="flex items-center justify-between">
