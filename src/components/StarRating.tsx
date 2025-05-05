@@ -1,4 +1,4 @@
-export default function Rating() {
+export default function StarRating() {
   return (
     <div className="rating rating-md rating-half">
       <input

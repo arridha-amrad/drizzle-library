@@ -1,4 +1,21 @@
-export default function FormReturnBook() {
+import { returnBook } from "@/actions/books/returnBook";
+import Rating from "@/components/StarRating";
+import { TLoanBook } from "@/queries/fetchOnLoanBooks";
+import { countCharge } from "@/utils";
+import { useAction } from "next-safe-action/hooks";
+import { ReactNode } from "react";
+
+type Props = {
+  children: ReactNode;
+  data: TLoanBook;
+};
+
+export default function FormReturnBook({
+  data: { id, loanAt, loanDueAt, userId, loanBy, title },
+  children,
+}: Props) {
+  const { execute, isPending } = useAction(returnBook, {});
+
   return (
     <form action={execute}>
       <input
@@ -41,16 +58,10 @@ export default function FormReturnBook() {
         ></textarea>
       </div>
       <div className="mt-4 flex justify-end gap-3">
-        <button
-          type="button"
-          className="btn btn-neutral"
-          onClick={() => refModal.current?.close()}
-        >
-          Close
-        </button>
+        {children}
         <button type="submit" className="btn btn-accent btn-soft">
           Finish
-          {pending && (
+          {isPending && (
             <span className="loading loading-spinner loading-sm"></span>
           )}
         </button>

@@ -37,12 +37,16 @@ export default async function TableBookBorrowers({ bookId }: Props) {
                   {data.book.title}
                 </td>
                 <td className="border-r border-base-content/10">
-                  {new Intl.DateTimeFormat("id").format(
-                    new Date(data.loan.loanAt)
-                  )}
+                  {new Intl.DateTimeFormat("us", {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }).format(new Date(data.loan.loanAt))}
                 </td>
                 <td className="border-r border-base-content/10">
-                  {new Intl.DateTimeFormat("id").format(
+                  {new Intl.DateTimeFormat("us").format(
                     new Date(data.loan.dueAt)
                   )}
                 </td>

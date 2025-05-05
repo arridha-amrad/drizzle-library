@@ -20,7 +20,6 @@ export default async function TableUsers({ page, users }: Props) {
           <thead>
             <tr className="bg-neutral">
               <th className={`${className.col}`}>No.</th>
-              <th className={`${className.col}`}>Id</th>
               <th className={`${className.col}`}>Name</th>
               <th className={`${className.col}`}>Email</th>
               <th className={`${className.col}`}>Joined At</th>
@@ -36,11 +35,10 @@ export default async function TableUsers({ page, users }: Props) {
               </tr>
             )}
             {users.map((user, i) => (
-              <tr className="hover cursor-pointer" key={user.id}>
+              <tr className="" key={user.id}>
                 <th className={`${className.col}`}>
                   {i + 1 + (page - 1) * LIMIT_USERS}
                 </th>
-                <td className={`${className.col}`}>{user.id}</td>
                 <td className={`${className.col}`}>{user.name}</td>
                 <td className={`${className.col}`}>{user.email}</td>
                 <td className={`${className.col}`}>

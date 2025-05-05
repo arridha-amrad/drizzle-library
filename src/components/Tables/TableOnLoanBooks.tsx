@@ -1,19 +1,29 @@
+"use client";
+
 import { LIMIT_BOOKS } from "@/constants";
-import { countCharge } from "@/utils";
+import { cn, countCharge } from "@/utils";
 import Link from "next/link";
-import FinishLoan from "./FinishLoan";
-import { TLoanBooks } from "@/queries/fetchOnLoanBooks";
+import FinishLoan from "../Modal/ModalReturnBook";
+import { TLoanBook } from "@/queries/fetchOnLoanBooks";
+import { useSearchParams } from "next/navigation";
 
 const className = {
   col: "border-r border-base-content/10",
 };
 
 type Props = {
-  books: TLoanBooks["books"];
+  books: TLoanBook[];
   page: number;
 };
 
-function LoansTable({ books, page }: Props) {
+function TableOnLoanBooks({ books, page }: Props) {
+  const sp = useSearchParams();
+  const highlightParam = sp.get("highlight");
+  const userId = sp.get("userId");
+  const bookId = sp.get("bookId");
+
+  const isHighlight = highlightParam === "true";
+
   return (
     <div className="rounded-box overflow-hidden border border-base-content/10 bg-base-100">
       <table className="table">
@@ -37,12 +47,21 @@ function LoansTable({ books, page }: Props) {
             </tr>
           ) : (
             books.map((book, i) => (
-              <tr key={`${book.id}${book.userId}`}>
+              <tr
+                className={cn(
+                  isHighlight &&
+                    book.id === bookId &&
+                    (userId ? book.userId === parseInt(userId) : false)
+                    ? "bg-primary/20"
+                    : ""
+                )}
+                key={`${book.id}${book.userId}`}
+              >
                 <td className={`${className.col}`}>
                   {i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/books/${book.id}`}>{book.title}</Link>
+                  <Link href={`/books/${book.bookSlug}`}>{book.title}</Link>
                 </td>
                 <td className={`${className.col}`}>
                   <Link href={`/users/${book.userId}`}>{book.loanBy}</Link>
@@ -76,4 +95,4 @@ function LoansTable({ books, page }: Props) {
   );
 }
 
-export default LoansTable;
+export default TableOnLoanBooks;

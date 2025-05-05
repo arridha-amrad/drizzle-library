@@ -24,7 +24,11 @@ export default function ModalBorrowBook({ available, title, bookId }: Props) {
       <dialog ref={refDialog} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Book borrowing form </h3>
-          <FormBorrowBook bookId={bookId} bookTitle={title}>
+          <FormBorrowBook
+            callback={() => refDialog.current?.close()}
+            bookId={bookId}
+            bookTitle={title}
+          >
             <button
               type="button"
               onClick={() => refDialog.current?.close()}

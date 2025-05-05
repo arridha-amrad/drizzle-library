@@ -2,7 +2,7 @@ import { CACHE_KEY } from "@/cacheKeys";
 import { LIMIT_BOOKS } from "@/constants";
 import db from "@/lib/drizzle/db";
 import { BooksTable, LoansTable, UsersTable } from "@/lib/drizzle/schema";
-import { count, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
 export const fetchOnLoanBooks = unstable_cache(
@@ -13,6 +13,7 @@ export const fetchOnLoanBooks = unstable_cache(
         loanBy: UsersTable.name,
         loanAt: LoansTable.createdAt,
         loanDueAt: LoansTable.dueAt,
+        bookSlug: BooksTable.slug,
         id: BooksTable.id,
         userId: UsersTable.id,
       })
@@ -20,7 +21,8 @@ export const fetchOnLoanBooks = unstable_cache(
       .innerJoin(UsersTable, eq(UsersTable.id, LoansTable.userId))
       .innerJoin(BooksTable, eq(BooksTable.id, LoansTable.bookId))
       .limit(LIMIT_BOOKS)
-      .offset((page ? page - 1 : 0) * LIMIT_BOOKS);
+      .offset((page ? page - 1 : 0) * LIMIT_BOOKS)
+      .orderBy(desc(LoansTable.createdAt));
 
     const total = await db
       .select({ count: count() })
@@ -39,4 +41,6 @@ export const fetchOnLoanBooks = unstable_cache(
   }
 );
 
-export type TLoanBooks = Awaited<ReturnType<typeof fetchOnLoanBooks>>;
+export type TLoanBook = Awaited<
+  ReturnType<typeof fetchOnLoanBooks>
+>["books"][number];

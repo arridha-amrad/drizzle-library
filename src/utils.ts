@@ -1,4 +1,6 @@
 import { CHARGE_PER_DAY } from "@/constants";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const countCharge = (dueDate: Date) => {
   const dueTime = new Date(dueDate).getTime();
@@ -8,3 +10,7 @@ export const countCharge = (dueDate: Date) => {
     Math.floor((currTime - dueTime) / (1000 * 60 * 60 * 24)) * CHARGE_PER_DAY;
   return charge <= 0 ? 0 : charge;
 };
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(...inputs));
+}

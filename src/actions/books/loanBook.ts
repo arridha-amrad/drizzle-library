@@ -55,23 +55,34 @@ export const loanBook = actionClient
         throw new SafeActionError("The same user has borrowed this book");
       }
 
-      await db.transaction(async (tx) => {
-        await tx.insert(LoansTable).values({
-          bookId,
-          userId,
-        });
+      const insertResult = await db.transaction(async (tx) => {
+        const result = await tx
+          .insert(LoansTable)
+          .values({
+            bookId,
+            userId,
+          })
+          .returning();
         await db
           .update(BooksTable)
           .set({
             available: book.available - 1,
           })
           .where(eq(BooksTable.id, book.id));
+
+        if (result.length === 0) {
+          throw new SafeActionError("Failed to insert to loan table");
+        }
+
+        return result;
       });
 
       revalidateTag(CACHE_KEY.books);
       revalidateTag(CACHE_KEY.bookDetail);
       revalidateTag(CACHE_KEY.loanBook);
-      revalidateTag(CACHE_KEY.loans);
+      revalidateTag(CACHE_KEY.onLoanBooks);
+
+      return insertResult[0];
     } catch (err) {
       throw err;
     }

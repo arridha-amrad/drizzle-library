@@ -23,7 +23,7 @@ const schema = zfd.formData({
   review: zfd.text(z.string().min(1, "review is required")),
 });
 
-export const finishBookLoan = actionClient
+export const returnBook = actionClient
   .schema(schema)
   .action(
     async ({

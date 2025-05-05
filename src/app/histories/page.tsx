@@ -25,10 +25,12 @@ export default async function Page({ searchParams }: Props) {
   ]);
 
   return (
-    <div className="xl:p-8 p-4 min-h-screen flex flex-col">
+    <div className="xl:px-8 xl:py-2 p-4 min-h-screen flex flex-col">
       <section className="flex flex-col items-start gap-3">
-        <Header />
-        <div className="py-4">
+        <div className="h-20 flex items-center">
+          <h1 className="text-3xl font-bold tracking-tight">Loan Histories</h1>
+        </div>
+        <div className="">
           <h1 className="text-lg font-semibold inline">Balance : </h1>
           <span>
             {new Intl.NumberFormat("id-ID", {

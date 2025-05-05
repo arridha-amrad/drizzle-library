@@ -1,9 +1,9 @@
 import PaginatedButton from "@/components/PaginatedButton";
 import { LIMIT_BOOKS } from "@/constants";
-import Link from "next/link";
-import LoansTable from "./LoansTable";
-import { Metadata } from "next";
 import { fetchOnLoanBooks } from "@/queries/fetchOnLoanBooks";
+import { Metadata } from "next";
+import Link from "next/link";
+import LoansTable from "../../components/Tables/TableOnLoanBooks";
 
 type Params = {
   searchParams: Promise<{
@@ -17,16 +17,15 @@ export const metadata: Metadata = {
 
 export default async function Page({ searchParams }: Params) {
   const { page } = await searchParams;
+
   const intPage = isNaN(Number(page)) ? 1 : Number(page);
 
   const { books, total } = await fetchOnLoanBooks(intPage);
 
   return (
-    <section className="xl:p-8 p-4 min-h-screen flex flex-col">
-      <div className="pb-4 flex justify-between">
-        <Link className="text-4xl font-bold tracking-tight" href="/loan">
-          All On Loan Books
-        </Link>
+    <section className="xl:px-8 xl:py-2 p-4  min-h-screen flex flex-col">
+      <div className="h-20 items-center flex justify-between">
+        <h1 className="text-3xl font-bold tracking-tight">Loan Books</h1>
       </div>
       <div className="flex-grow h-full py-4">
         <LoansTable books={books} page={intPage} />
