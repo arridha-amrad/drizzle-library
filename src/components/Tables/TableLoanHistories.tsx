@@ -1,17 +1,27 @@
+"use client";
+
 import { LIMIT_BOOKS } from "@/constants";
 import Link from "next/link";
-import { History } from "./query";
+import { LoanHistory } from "@/queries/fetchLoanHistories";
+import { cn, formatDate, formatToRupiah } from "@/utils";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   page: number;
-  histories: History[];
+  histories: LoanHistory[];
 };
 
 const className = {
   col: "border-r border-base-content/10",
 };
 
-export default function Table({ histories, page }: Props) {
+export default function TableLoanHistories({ histories, page }: Props) {
+  const sp = useSearchParams();
+  const highlightParam = sp.get("highlight");
+  const historyId = sp.get("historyId");
+
+  const isHighlight = highlightParam === "true";
+
   return (
     <div className="rounded-box mt-4 overflow-hidden border border-base-content/10 bg-base-100">
       <table className="table">
@@ -33,34 +43,38 @@ export default function Table({ histories, page }: Props) {
               </td>
             </tr>
           ) : (
-            histories.map((histories, i) => (
-              <tr key={`${histories.id}`}>
+            histories.map((history, i) => (
+              <tr
+                className={cn(
+                  isHighlight &&
+                    (historyId ? history.id === Number(historyId) : false)
+                    ? "bg-primary/20"
+                    : ""
+                )}
+                key={`${history.id}`}
+              >
                 <td className={`${className.col}`}>
                   {i + 1 + (page ? (Number(page) - 1) * LIMIT_BOOKS : 0)}
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/books/${histories.bookId}`}>
-                    {histories.bookTitle}
+                  <Link href={`/books/${history.bookSlug}`}>
+                    {history.bookTitle}
                   </Link>
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/users/${histories.borrowerId}`}>
-                    {histories.borrowerName}
+                  <Link href={`/users/${history.borrowerName}`}>
+                    {history.borrowerName}
                   </Link>
                 </td>
                 <td className={`${className.col}`}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(histories.loanAt))}
+                  {formatDate(new Date(history.loanAt), true)}
                 </td>
                 <td className={`${className.col}`}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(histories.returnAt))}
+                  {formatDate(new Date(history.returnAt), true)}
                 </td>
-                <td className={`${className.col}`}>{histories.charge}</td>
+                <td className={`${className.col}`}>
+                  {formatToRupiah(history.charge)}
+                </td>
               </tr>
             ))
           )}

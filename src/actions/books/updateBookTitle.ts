@@ -4,6 +4,7 @@ import { CACHE_KEY } from "@/cacheKeys";
 import db from "@/lib/drizzle/db";
 import { BooksTable } from "@/lib/drizzle/schema";
 import { actionClient, SafeActionError } from "@/lib/safeAction";
+import { createSlug } from "@/utils";
 import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -23,6 +24,7 @@ export const updateBookTitle = actionClient
           .update(BooksTable)
           .set({
             title,
+            slug: createSlug(title),
           })
           .where(eq(BooksTable.id, bookId))
           .returning();

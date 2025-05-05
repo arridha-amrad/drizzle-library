@@ -20,10 +20,7 @@ export default function FromCreateUser({ isShowCancelButton }: Props) {
   });
 
   const { execute, isPending } = useAction(createUser, {
-    onSuccess({ data }) {
-      if (data) {
-        router.push(`/users/${data.name}`);
-      }
+    onSuccess() {
       toast.success("Register is successful");
     },
     onError: ({ error }) => {

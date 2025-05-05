@@ -1,9 +1,10 @@
 import PaginateButton from "@/components/PaginatedButton";
 import { LIMIT_BOOKS } from "@/constants";
+import { fetchLibraryBalance } from "@/queries/fetchLibraryBalance";
+import { fetchLoanHistories } from "@/queries/fetchLoanHistories";
 import { Metadata } from "next";
-import Header from "./Header";
-import { fetchHistories, sumCharge } from "./query";
-import Table from "./Table";
+import Table from "../../components/Tables/TableLoanHistories";
+import { formatToRupiah } from "@/utils";
 
 export const metadata: Metadata = {
   title: "Loan Histories",
@@ -20,8 +21,8 @@ export default async function Page({ searchParams }: Props) {
   const intPage = isNaN(Number(page)) ? 1 : Number(page);
 
   const [{ histories, total }, balance] = await Promise.all([
-    fetchHistories(intPage),
-    sumCharge(),
+    fetchLoanHistories(intPage),
+    fetchLibraryBalance(),
   ]);
 
   return (
@@ -32,12 +33,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
         <div className="">
           <h1 className="text-lg font-semibold inline">Balance : </h1>
-          <span>
-            {new Intl.NumberFormat("id-ID", {
-              style: "currency",
-              currency: "IDR",
-            }).format(Number(balance[0].total!))}
-          </span>
+          <span>{formatToRupiah(balance)}</span>
         </div>
       </section>
 

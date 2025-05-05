@@ -1,14 +1,23 @@
 "use client";
 
 import FormReturnBook from "@/components/Forms/FormReturnBook";
-import { TLoanBook } from "@/queries/fetchOnLoanBooks";
 import { useRef } from "react";
 
 type Props = {
-  data: TLoanBook;
+  bookId: string;
+  dueAt: Date;
+  loanBy: string;
+  title: string;
+  userId: number;
 };
 
-export default function ModalReturnBook({ data }: Props) {
+export default function ModalReturnBook({
+  bookId,
+  dueAt,
+  loanBy,
+  title,
+  userId,
+}: Props) {
   const refModal = useRef<HTMLDialogElement | null>(null);
 
   return (
@@ -21,8 +30,14 @@ export default function ModalReturnBook({ data }: Props) {
       </button>
       <dialog ref={refModal} className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Finish Loan</h3>
-          <FormReturnBook data={data}>
+          <h3 className="font-bold text-lg">Return book</h3>
+          <FormReturnBook
+            bookId={bookId}
+            dueAt={dueAt}
+            loanBy={loanBy}
+            title={title}
+            userId={userId}
+          >
             <button
               type="button"
               className="btn btn-neutral"

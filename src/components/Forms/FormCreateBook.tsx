@@ -25,8 +25,8 @@ export default function FormCreateBook({ isShowCancelButton }: Props) {
   const { execute, isPending } = useAction(createBook, {
     onSuccess({ data }) {
       if (data) {
-        toast.success("New book created");
         router.push(`/books/${data.slug}`);
+        toast.success("New book created");
       }
     },
     onError({ error: { validationErrors, serverError } }) {

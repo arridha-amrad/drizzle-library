@@ -1,6 +1,5 @@
 import { loanBook } from "@/actions/books/loanBook";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 import { toast } from "react-toastify";
 import InputBorrowBookUser from "../Input/InputBorrowBookUser";
@@ -18,16 +17,9 @@ export default function FormBorrowBook({
   children,
   callback,
 }: Props) {
-  const router = useRouter();
-
   const { execute, isPending } = useAction(loanBook, {
-    onSuccess({ data }) {
+    onSuccess() {
       toast.success("Loan successful");
-      if (data) {
-        router.push(
-          `/loans?highlight=true&userId=${data.userId}&bookId=${data.bookId}`
-        );
-      }
     },
     onError({ error: { serverError, validationErrors } }) {
       if (serverError) {

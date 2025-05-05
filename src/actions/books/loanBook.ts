@@ -7,6 +7,7 @@ import { BooksTable, LoansTable } from "@/lib/drizzle/schema";
 import { actionClient, SafeActionError } from "@/lib/safeAction";
 import { count, eq, and } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
@@ -18,8 +19,6 @@ export const loanBook = actionClient
     })
   )
   .action(async ({ parsedInput: { bookId, userId } }) => {
-    console.log({ bookId, userId });
-
     try {
       const totalLoan = await db
         .select({
@@ -82,7 +81,11 @@ export const loanBook = actionClient
       revalidateTag(CACHE_KEY.loanBook);
       revalidateTag(CACHE_KEY.onLoanBooks);
 
-      return insertResult[0];
+      const data = insertResult[0];
+
+      redirect(
+        `/loans?highlight=true&userId=${data.userId}&bookId=${data.bookId}`
+      );
     } catch (err) {
       throw err;
     }

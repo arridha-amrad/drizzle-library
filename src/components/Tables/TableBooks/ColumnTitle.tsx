@@ -1,6 +1,7 @@
 "use client";
 
 import { updateBookTitle } from "@/actions/books/updateBookTitle";
+import { cn } from "@/utils";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
 import { KeyboardEvent, useState } from "react";
@@ -12,15 +13,11 @@ type Props = {
   id: string;
 };
 
-const initialState = {
-  validationErrors: undefined,
-  actionError: undefined,
-  success: false,
-};
-
 function BookTableTitle({ slug, title, id }: Props) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [state, setState] = useState(title);
+
+  const [bookTitle, setBookTitle] = useState(title);
 
   const { execute, isPending } = useAction(updateBookTitle.bind(null, id), {
     onSuccess() {
@@ -37,6 +34,10 @@ function BookTableTitle({ slug, title, id }: Props) {
           toast.error(vErr[0]);
         }
       }
+    },
+    onExecute({ input }) {
+      const title = (input as FormData).get("title") as string;
+      setBookTitle(title);
     },
   });
 
@@ -65,8 +66,8 @@ function BookTableTitle({ slug, title, id }: Props) {
           </form>
         </fieldset>
       ) : (
-        <Link className="line-clamp-2" href={`/books/${slug}`}>
-          {title}
+        <Link className={cn("line-clamp-2")} href={`/books/${slug}`}>
+          {bookTitle}
         </Link>
       )}
       {!isUpdate && (

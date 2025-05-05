@@ -1,17 +1,23 @@
+"use client";
+
 import { LIMIT_USERS } from "@/constants";
 import { User } from "@/queries/fetchUsers";
 import EditUserButton from "../Buttons/ButtonEditUser";
 import ButtonDeleteUser from "../Buttons/ButtonDeleteUser";
+import { formatDate } from "@/utils";
+import { useRouter } from "nextjs-toploader/app";
 
 type Props = {
   page: number;
   users: User[];
 };
 
-export default async function TableUsers({ page, users }: Props) {
+export default function TableUsers({ page, users }: Props) {
   const className = {
     col: "border-r border-base-content/10",
   };
+
+  const router = useRouter();
 
   return (
     <>
@@ -35,16 +41,18 @@ export default async function TableUsers({ page, users }: Props) {
               </tr>
             )}
             {users.map((user, i) => (
-              <tr className="" key={user.id}>
+              <tr
+                className="hover:bg-black/5 cursor-pointer"
+                onClick={() => router.push(`/users/${user.id}`)}
+                key={user.id}
+              >
                 <th className={`${className.col}`}>
                   {i + 1 + (page - 1) * LIMIT_USERS}
                 </th>
                 <td className={`${className.col}`}>{user.name}</td>
                 <td className={`${className.col}`}>{user.email}</td>
                 <td className={`${className.col}`}>
-                  {new Intl.DateTimeFormat("en-US").format(
-                    new Date(user.createdAt)
-                  )}
+                  {formatDate(new Date(user.createdAt))}
                 </td>
                 <td className={`${className.col}`}>
                   <div className="flex items-center gap-2">

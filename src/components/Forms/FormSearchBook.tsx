@@ -6,7 +6,7 @@ import { useRef } from "react";
 function FormSearchBook() {
   const formRef = useRef<HTMLFormElement | null>(null);
   return (
-    <Form ref={formRef} className="w-full max-w-sm" action="">
+    <Form ref={formRef} className="w-full max-w-sm" action="/books/search">
       <label className="input input-neutral w-full">
         <svg
           className="h-[1em] opacity-50"

@@ -1,7 +1,7 @@
 "use client";
 
 import { LIMIT_BOOKS } from "@/constants";
-import { cn, countCharge } from "@/utils";
+import { cn, countCharge, formatDate, formatToRupiah } from "@/utils";
 import Link from "next/link";
 import FinishLoan from "../Modal/ModalReturnBook";
 import { TLoanBook } from "@/queries/fetchOnLoanBooks";
@@ -64,27 +64,26 @@ function TableOnLoanBooks({ books, page }: Props) {
                   <Link href={`/books/${book.bookSlug}`}>{book.title}</Link>
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/users/${book.userId}`}>{book.loanBy}</Link>
+                  <Link href={`/users/${book.loanBy}`}>{book.loanBy}</Link>
                 </td>
                 <td className={`${className.col}`}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(book.loanAt))}
+                  {formatDate(new Date(book.loanAt), true)}
                 </td>
                 <td className={`${className.col}`}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(book.loanDueAt))}
+                  {formatDate(new Date(book.loanDueAt), true)}
                 </td>
 
                 <td className={`${className.col}`}>
-                  {countCharge(book.loanDueAt).toString()}
+                  {formatToRupiah(countCharge(book.loanDueAt))}
                 </td>
                 <td className={`${className.col}`}>
-                  {/* <Done data={book} /> */}
-                  <FinishLoan data={book} />
+                  <FinishLoan
+                    bookId={book.id}
+                    dueAt={book.loanDueAt}
+                    loanBy={book.loanBy}
+                    title={book.title}
+                    userId={book.userId}
+                  />
                 </td>
               </tr>
             ))

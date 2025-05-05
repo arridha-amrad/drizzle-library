@@ -4,8 +4,6 @@ import { UsersTable } from "@/lib/drizzle/schema";
 import { desc, ilike } from "drizzle-orm";
 
 export const searchUser = async (name: string) => {
-  console.log("search name : ", name);
-
   const users = await db
     .select()
     .from(UsersTable)

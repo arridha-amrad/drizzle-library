@@ -1,6 +1,7 @@
 "use client";
 
 import FormBorrowBook from "@/components/Forms/FormBorrowBook";
+import { cn } from "@/utils";
 import { useRef } from "react";
 
 type Props = {
@@ -17,7 +18,10 @@ export default function ModalBorrowBook({ available, title, bookId }: Props) {
       <button
         disabled={available === 0}
         onClick={() => refDialog.current?.showModal()}
-        className="btn btn-soft btn-primary animate-pulse"
+        className={cn(
+          "btn btn-soft btn-primary",
+          available === 0 ? "" : "animate-pulse"
+        )}
       >
         Borrow
       </button>

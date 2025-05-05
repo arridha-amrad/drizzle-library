@@ -6,7 +6,7 @@ import ButtonDeleteBook from "@/components/Buttons/ButtonDeleteBook";
 
 type Book = typeof BooksTable.$inferSelect;
 
-export default async function Table({
+export default async function TableBooks({
   books,
   page,
 }: {

@@ -1,4 +1,5 @@
 import { fetchBookBorrowers } from "@/queries/fetchBookBorrowers";
+import { formatDate } from "@/utils";
 
 type Props = {
   bookId: string;
@@ -37,18 +38,10 @@ export default async function TableBookBorrowers({ bookId }: Props) {
                   {data.book.title}
                 </td>
                 <td className="border-r border-base-content/10">
-                  {new Intl.DateTimeFormat("us", {
-                    day: "numeric",
-                    month: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }).format(new Date(data.loan.loanAt))}
+                  {formatDate(new Date(data.loan.loanAt), true)}
                 </td>
                 <td className="border-r border-base-content/10">
-                  {new Intl.DateTimeFormat("us").format(
-                    new Date(data.loan.dueAt)
-                  )}
+                  {formatDate(new Date(data.loan.dueAt), true)}
                 </td>
               </tr>
             ))

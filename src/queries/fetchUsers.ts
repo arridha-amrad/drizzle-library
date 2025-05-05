@@ -6,7 +6,7 @@ import { count, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
 export const fetchUsers = unstable_cache(
-  async (page?: number) => {
+  async (page: number) => {
     const u = await db
       .select()
       .from(UsersTable)

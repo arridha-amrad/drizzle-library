@@ -1,16 +1,17 @@
 import { CACHE_KEY } from "@/cacheKeys";
-import db from "@/lib/drizzle/db";
-import { BooksTable, HistoriesTable, UsersTable } from "@/lib/drizzle/schema";
 import { LIMIT_BOOKS } from "@/constants";
-import { count, desc, eq, sum } from "drizzle-orm";
+import db from "@/lib/drizzle/db";
+import { HistoriesTable, BooksTable, UsersTable } from "@/lib/drizzle/schema";
+import { desc, eq, count } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const fetchHistories = unstable_cache(
+export const fetchLoanHistories = unstable_cache(
   async (page: number) => {
     const histories = await db
       .select({
         id: HistoriesTable.id,
         bookTitle: BooksTable.title,
+        bookSlug: BooksTable.slug,
         bookId: BooksTable.id,
         borrowerName: UsersTable.name,
         borrowerId: UsersTable.id,
@@ -39,17 +40,6 @@ export const fetchHistories = unstable_cache(
   }
 );
 
-export const sumCharge = unstable_cache(
-  async () => {
-    const total = await db
-      .select({ total: sum(HistoriesTable.charge) })
-      .from(HistoriesTable);
-    return total;
-  },
-  [CACHE_KEY.charge],
-  { tags: [CACHE_KEY.charge], revalidate: 60 }
-);
-
-export type History = Awaited<
-  ReturnType<typeof fetchHistories>
+export type LoanHistory = Awaited<
+  ReturnType<typeof fetchLoanHistories>
 >["histories"][number];

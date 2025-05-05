@@ -28,7 +28,7 @@ export default function ModalFilterBook() {
       </button>
       <dialog ref={refDialog} className="modal">
         <div className="modal-box">
-          <FormFilterBook />
+          <FormFilterBook callback={() => refDialog.current?.close()} />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>

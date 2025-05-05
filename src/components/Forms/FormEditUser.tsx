@@ -3,7 +3,7 @@
 import { editUser } from "@/actions/users/editUser";
 import { User } from "@/queries/fetchUsers";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -24,6 +24,8 @@ export default function FormEditUser({
   });
 
   const router = useRouter();
+
+  const pathname = usePathname();
 
   const [state, setState] = useState({
     name: user.name,
@@ -65,8 +67,9 @@ export default function FormEditUser({
           cancelCallback();
         }
         toast.success("Edit is successful");
-        const name = decodeURIComponent(data.name);
-        router.push(`/users/${name}`);
+        if (pathname === "/users") {
+          router.push(`/users/${data.id}`);
+        }
       }
     },
   });
