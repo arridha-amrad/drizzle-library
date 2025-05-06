@@ -1,5 +1,6 @@
 import { fetchBookBorrowers } from "@/queries/fetchBookBorrowers";
 import { formatDate } from "@/utils";
+import Link from "next/link";
 
 type Props = {
   bookId: string;
@@ -32,7 +33,7 @@ export default async function TableBookBorrowers({ bookId }: Props) {
               <tr key={data.user.id}>
                 <td className="border-r border-base-content/10">{i + 1}</td>
                 <td className="border-r border-base-content/10">
-                  {data.user.name}
+                  <Link href={`/users/${data.user.id}`}>{data.user.name}</Link>
                 </td>
                 <td className="border-r border-base-content/10">
                   {data.book.title}

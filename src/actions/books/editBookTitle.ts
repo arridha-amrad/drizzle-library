@@ -7,10 +7,11 @@ import { actionClient, SafeActionError } from "@/lib/safeAction";
 import { createSlug } from "@/utils";
 import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
-export const updateBookTitle = actionClient
+export const editBookTitle = actionClient
   .schema(
     zfd.formData({
       title: zfd.text(z.string().min(3, "Title too short")),
@@ -33,8 +34,12 @@ export const updateBookTitle = actionClient
           throw new SafeActionError("Failed to update the book");
         }
 
+        const book = result[0];
+
         revalidateTag(CACHE_KEY.books);
         revalidateTag(CACHE_KEY.bookDetail);
+
+        redirect(`/books/${book.slug}`);
       } catch (err) {
         throw err;
       }

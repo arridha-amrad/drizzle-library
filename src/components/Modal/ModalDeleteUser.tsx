@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useRef, useTransition } from "react";
 import { toast } from "react-toastify";
 
-export default function ButtonDeleteUser({ id }: { id: number }) {
+export default function ModalDeleteUser({ id }: { id: number }) {
   const refDialog = useRef<HTMLDialogElement | null>(null);
   const [isPending, startTransition] = useTransition();
 

@@ -4,20 +4,15 @@ import { editUser } from "@/actions/users/editUser";
 import { User } from "@/queries/fetchUsers";
 import { useAction } from "next-safe-action/hooks";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
-  cancelCallback?: VoidFunction;
   user: User;
-  setPendingUi: Dispatch<SetStateAction<boolean>>;
+  children: ReactNode;
 };
 
-export default function FormEditUser({
-  cancelCallback,
-  user,
-  setPendingUi,
-}: Props) {
+export default function FormEditUser({ user, children }: Props) {
   const [validationErrors, setValidationErrors] = useState({
     name: "",
     email: "",
@@ -55,20 +50,13 @@ export default function FormEditUser({
         toast.error(error.serverError);
       }
     },
-    onExecute() {
-      setPendingUi(true);
-    },
-    onSettled() {
-      setPendingUi(false);
-    },
     onSuccess({ data }) {
       if (data) {
-        if (cancelCallback) {
-          cancelCallback();
-        }
         toast.success("Edit is successful");
         if (pathname === "/users") {
           router.push(`/users/${data.id}`);
+        } else {
+          router.refresh();
         }
       }
     },
@@ -104,15 +92,7 @@ export default function FormEditUser({
         )}
       </fieldset>
       <div className="flex justify-end gap-4 mt-4">
-        {cancelCallback && (
-          <button
-            type="button"
-            onClick={cancelCallback}
-            className="btn btn-neutral w-20"
-          >
-            Close
-          </button>
-        )}
+        {children}
         <button type="submit" className="btn btn-accent btn-soft w-20">
           {isPending ? (
             <span className="loading loading-spinner loading-xs"></span>

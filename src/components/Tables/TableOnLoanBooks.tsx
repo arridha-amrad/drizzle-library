@@ -64,7 +64,7 @@ function TableOnLoanBooks({ books, page }: Props) {
                   <Link href={`/books/${book.bookSlug}`}>{book.title}</Link>
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/users/${book.loanBy}`}>{book.loanBy}</Link>
+                  <Link href={`/users/${book.userId}`}>{book.loanBy}</Link>
                 </td>
                 <td className={`${className.col}`}>
                   {formatDate(new Date(book.loanAt), true)}

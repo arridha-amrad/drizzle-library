@@ -62,7 +62,7 @@ export default function TableLoanHistories({ histories, page }: Props) {
                   </Link>
                 </td>
                 <td className={`${className.col}`}>
-                  <Link href={`/users/${history.borrowerName}`}>
+                  <Link href={`/users/${history.borrowerId}`}>
                     {history.borrowerName}
                   </Link>
                 </td>

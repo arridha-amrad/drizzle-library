@@ -13,6 +13,12 @@ type Props = {
 export default async function Page({ params }: Props) {
   const id = (await params).id;
 
+  const isNotValidUserId = isNaN(Number(id));
+
+  if (isNotValidUserId) {
+    return notFound();
+  }
+
   const { users } = await fetchUserById(Number(id));
   const books = await fetchUserLoanBooks(Number(id));
 

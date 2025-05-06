@@ -22,6 +22,13 @@ export default async function Page({ searchParams }: Props) {
           <FormSearchUser />
         </Suspense>
       </div>
+      <div className="breadcrumbs text-sm">
+        <ul>
+          <li>Users</li>
+          <li>Search</li>
+          <li>{name}</li>
+        </ul>
+      </div>
       <div className="flex-1">
         <TableUsers users={users} page={1} />
       </div>

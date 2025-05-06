@@ -33,7 +33,7 @@ export default async function TableBookDetail({ book }: Props) {
                 <Link
                   key={i}
                   className="space-x-1"
-                  href={`/books?isFilter=true&categories=${
+                  href={`/books/search?categories=${
                     cat.includes("#") ? cat.replaceAll("#", "%23") : cat
                   }`}
                 >

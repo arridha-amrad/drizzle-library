@@ -4,12 +4,14 @@ import { CACHE_KEY } from "@/cacheKeys";
 import db from "@/lib/drizzle/db";
 import { BooksTable } from "@/lib/drizzle/schema";
 import { actionClient, SafeActionError } from "@/lib/safeAction";
+import { createSlug } from "@/utils";
 import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
-export const updateBook = actionClient
+export const editBook = actionClient
   .schema(
     zfd.formData({
       title: zfd.text(z.string()),
@@ -18,7 +20,7 @@ export const updateBook = actionClient
         z
           .string()
           .min(1, "required")
-          .transform((v) => v.split(",").map((c) => c.trim()))
+          .transform(async (v) => v.split(",").map((c) => c.trim()))
       ),
       stocks: zfd.numeric(),
       available: zfd.numeric(),
@@ -43,6 +45,7 @@ export const updateBook = actionClient
         const result = await db
           .update(BooksTable)
           .set({
+            slug: createSlug(title),
             author,
             available,
             categories,
@@ -56,9 +59,12 @@ export const updateBook = actionClient
           throw new SafeActionError("Failed to perform edit book");
         }
 
+        const updatedBook = result[0];
         revalidateTag(CACHE_KEY.books);
         revalidateTag(CACHE_KEY.bookDetail);
         revalidateTag(CACHE_KEY.loanBook);
+
+        redirect(`/books/${updatedBook.slug}`);
       } catch (err) {
         throw err;
       }

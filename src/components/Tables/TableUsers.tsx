@@ -2,8 +2,8 @@
 
 import { LIMIT_USERS } from "@/constants";
 import { User } from "@/queries/fetchUsers";
-import EditUserButton from "../Buttons/ButtonEditUser";
-import ButtonDeleteUser from "../Buttons/ButtonDeleteUser";
+import EditUserButton from "../Modal/ModalEditUser";
+import ModalDeleteUser from "../Modal/ModalDeleteUser";
 import { formatDate } from "@/utils";
 import { useRouter } from "nextjs-toploader/app";
 
@@ -41,15 +41,16 @@ export default function TableUsers({ page, users }: Props) {
               </tr>
             )}
             {users.map((user, i) => (
-              <tr
-                className="hover:bg-black/5 cursor-pointer"
-                onClick={() => router.push(`/users/${user.id}`)}
-                key={user.id}
-              >
+              <tr className="hover:bg-black/5 cursor-pointer" key={user.id}>
                 <th className={`${className.col}`}>
                   {i + 1 + (page - 1) * LIMIT_USERS}
                 </th>
-                <td className={`${className.col}`}>{user.name}</td>
+                <td
+                  onClick={() => router.push(`/users/${user.id}`)}
+                  className={`${className.col}`}
+                >
+                  {user.name}
+                </td>
                 <td className={`${className.col}`}>{user.email}</td>
                 <td className={`${className.col}`}>
                   {formatDate(new Date(user.createdAt))}
@@ -57,7 +58,7 @@ export default function TableUsers({ page, users }: Props) {
                 <td className={`${className.col}`}>
                   <div className="flex items-center gap-2">
                     <EditUserButton user={user} />
-                    <ButtonDeleteUser id={user.id} />
+                    <ModalDeleteUser id={user.id} />
                   </div>
                 </td>
               </tr>

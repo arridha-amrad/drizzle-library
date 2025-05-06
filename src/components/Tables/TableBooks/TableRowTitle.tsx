@@ -1,6 +1,6 @@
 "use client";
 
-import { updateBookTitle } from "@/actions/books/updateBookTitle";
+import { editBookTitle } from "@/actions/books/editBookTitle";
 import { cn } from "@/utils";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
@@ -13,16 +13,15 @@ type Props = {
   id: string;
 };
 
-function BookTableTitle({ slug, title, id }: Props) {
+function TableRowTitle({ slug, title, id }: Props) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [state, setState] = useState(title);
 
   const [bookTitle, setBookTitle] = useState(title);
 
-  const { execute, isPending } = useAction(updateBookTitle.bind(null, id), {
+  const { execute, isPending } = useAction(editBookTitle.bind(null, id), {
     onSuccess() {
       toast.success("Title updated");
-      setIsUpdate(false);
     },
     onError({ error: { serverError, validationErrors } }) {
       if (serverError) {
@@ -84,4 +83,4 @@ function BookTableTitle({ slug, title, id }: Props) {
   );
 }
 
-export default BookTableTitle;
+export default TableRowTitle;
