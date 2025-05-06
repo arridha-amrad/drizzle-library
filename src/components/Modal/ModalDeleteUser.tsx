@@ -14,11 +14,20 @@ export default function ModalDeleteUser({ id }: { id: number }) {
 
   const remove = () => {
     startTransition(async () => {
-      await deleteUser(id);
-      refDialog.current?.close();
-      toast.success("Deleted");
-      if (pathname !== "/users") {
-        router.push("/users");
+      try {
+        const result = await deleteUser(id);
+        refDialog.current?.close();
+        if (result?.serverError) {
+          toast.error(result.serverError);
+          return;
+        }
+
+        toast.success("Deleted");
+        if (pathname !== "/users") {
+          router.push("/users");
+        }
+      } catch (err) {
+        toast.error("Failed to delete user. Please try again");
       }
     });
   };

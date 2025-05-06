@@ -4,15 +4,15 @@ import { editUser } from "@/actions/users/editUser";
 import { User } from "@/queries/fetchUsers";
 import { useAction } from "next-safe-action/hooks";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, ReactNode, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
   user: User;
-  children: ReactNode;
+  closeModal: VoidFunction;
 };
 
-export default function FormEditUser({ user, children }: Props) {
+export default function FormEditUser({ user, closeModal }: Props) {
   const [validationErrors, setValidationErrors] = useState({
     name: "",
     email: "",
@@ -53,10 +53,10 @@ export default function FormEditUser({ user, children }: Props) {
     onSuccess({ data }) {
       if (data) {
         toast.success("Edit is successful");
-        if (pathname === "/users") {
-          router.push(`/users/${data.id}`);
+        if (pathname === `/users/${data.id}`) {
+          closeModal();
         } else {
-          router.refresh();
+          router.push(`/users/${data.id}`);
         }
       }
     },
@@ -92,7 +92,13 @@ export default function FormEditUser({ user, children }: Props) {
         )}
       </fieldset>
       <div className="flex justify-end gap-4 mt-4">
-        {children}
+        <button
+          type="button"
+          onClick={closeModal}
+          className="btn btn-neutral w-20"
+        >
+          Close
+        </button>
         <button type="submit" className="btn btn-accent btn-soft w-20">
           {isPending ? (
             <span className="loading loading-spinner loading-xs"></span>
